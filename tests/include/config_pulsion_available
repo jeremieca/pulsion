@@ -1,0 +1,74 @@
+#!/bin/bash
+
+function command_list_available {
+
+	function process {
+		
+		if [ $# -eq 1 ]; then
+			list_available $1
+		fi
+		
+	}
+
+}
+
+function command_c1 {
+
+	function process {
+		echo "ok_process_1"
+	}
+	function help {
+		echo "ok_help_1"
+	}
+
+}
+
+function command_c2 {
+
+	function process {
+		echo "ok_process_2"
+	}
+	function help {
+		echo "ok_help_2"
+	}
+	
+}
+
+function command_install {
+
+	function help {
+		echo "help_install"
+	}
+
+	function process {
+
+		install echo
+		install new_command
+		install success45676542467535667567567
+		install notfoundinstallercommand
+
+		rm /usr/local/bin/success45676542467535667567567
+
+	}
+
+}
+
+function install_echo {
+
+	echo "install_echo"
+	
+}
+
+function install_new_command {
+
+	echo "install_new_command"
+	
+}
+
+function install_success45676542467535667567567 {
+
+	cd /usr/local/bin/
+	touch success45676542467535667567567
+	chmod +x success45676542467535667567567
+	
+}

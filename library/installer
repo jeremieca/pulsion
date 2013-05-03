@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Install command call install_[command] function if necessary
+function install {
+
+	if [ $# -ne 1 ]; then
+		verbose 1 "Usage : install [command name]"
+		return 1
+	fi
+
+	install_cmd="install_$1"
+
+	if is_function_exist $1; then
+		verbose 3 "  - $1 is already installed"
+		return 0
+	else
+		
+		if ! type -t $install_cmd | grep -q "^function$" ; then
+
+			verbose 1 "  - install_$1 function implementation does not exist"
+			verbose 2 "    - $1 install failed"
+			return 1
+
+		fi
+
+		if ! temporary_folder_create; then return 1; fi
+
+		verbose 3 "  - $1 install in progress..."
+		$install_cmd > /dev/null
+		hash -r
+
+		temporary_folder_remove
+		
+		if is_function_exist $1; then
+			verbose 1 "    - $1 is installed"
+			return 0
+		else
+			verbose 1 "    - $1 install failed"
+			return 1
+		fi
+
+	fi
+
+}

@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# Return 0 (true) if the function in param $1 exist
+function is_function_exist {
+
+	if [ $# -ne 1 ]; then
+		return 1
+	fi
+
+	if which $1 > /dev/null; then
+		return 0
+	fi
+
+	return 1
+
+} 
+
+# Return 0 (true) if the root mode is activated
+function is_root {
+
+	if [ "$(id -u)" != "0" ]; then
+		return 1
+	fi
+	return 0
+
+}
+
+# Create the temporary folder $TEMPORARY_FOLDER that contains files for install tools
+function temporary_folder_create {
+
+	if [ -d "$TEMPORARY_FOLDER" ]; then
+		verbose 1 "Error : $TEMPORARY_FOLDER folder already exist. Remove it before install."
+		return 1
+	fi
+	if ! mkdir -p "$TEMPORARY_FOLDER"; then
+		verbose 1 "Error : $TEMPORARY_FOLDER fail to mkdir -p."
+		return 1
+	fi
+
+	cd "$TEMPORARY_FOLDER"
+	return 0
+
+}
+
+# Remove the temporary folder $TEMPORARY_FOLDER create in the begining of install
+function temporary_folder_remove {
+
+	cd $SCRIPT_PATH
+	rm -Rf $TEMPORARY_FOLDER
+
+}
+
+# Display the platform
+function get_platform {
+
+	unamestr=`uname`
+	if [[ "$unamestr" == 'Linux' ]]; then
+	   echo "linux"
+	elif [[ "$unamestr" == 'Darwin' ]]; then
+	   echo "osx"
+	fi
+
+}
+
+# Display or not the param $1 depending on the verbose level
+function verbose {
+
+	if [ $# -eq 2 ]; then
+	
+		if [ $1 -le $VERBOSE ]; then
+			echo $2
+		fi
+	
+	fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

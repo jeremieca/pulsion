@@ -1,0 +1,57 @@
+#!/bin/bash
+
+function command_default {
+
+	function help {
+	
+		echo "
+
+************************************************
+
+      Welcome in the pulsion application
+
+************************************************
+
+Modules available ( Config : $CONFIG_FILE )
+$(list_available command)
+
+Installers available ( Config : $CONFIG_FILE )
+$(list_available install)
+
+Parameters
+    -c [path] Config file path
+    -v [level] Mode verbose (1..5)
+    -h, --help Help for a specific command
+		
+		"
+
+	}
+
+	function process {
+
+		help
+
+	}
+
+
+}
+
+# List the available function ("command" or "install" params)
+function list_available {
+
+	if [ $# -ne 1 ]; then
+		verbose 2 "Error : Bad usage of function \"list_available\""
+		return 1
+	fi
+
+	# Get all the declared variable begining by $1 params : (command, install...)
+	list=(`declare -F | cut -d" " -f3 | grep "^$1_"`)
+
+	for item in ${list[@]}
+	do
+		if [[ "$item" != "$1_default" ]]; then
+			echo "    - ${item/$1_/}"
+		fi
+	done
+
+}

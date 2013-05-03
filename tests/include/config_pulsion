@@ -1,0 +1,17 @@
+#!/bin/bash
+
+function command_hello {
+
+	function help {
+
+		echo "Hello world !"
+
+	}
+
+	function process {
+
+		echo "Hello world !"
+	
+	}
+
+}

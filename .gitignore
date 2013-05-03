@@ -1,0 +1,3 @@
+# include output/.gitignore
+scripts/pulsion
+.DS_Store

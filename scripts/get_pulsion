@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Environment variables
+INSTALL_PATH="$(pwd)/scripts"
+TEMPORARY_FOLDER="/tmp/PulsionInstall/$RANDOM"
+
+# Clone in temporary folder
+mkdir -p $TEMPORARY_FOLDER
+cd $TEMPORARY_FOLDER
+git clone https://jeremieca@bitbucket.org/deescut/pulsion.git
+cd pulsion
+git checkout master
+
+# Fusion and copy
+sudo ./library/pulsion fusion -t
+if [ -f output/pulsion ]; then
+	sudo cp output/pulsion $INSTALL_PATH
+	sudo chmod +x $INSTALL_PATH/pulsion
+	echo "You have now the latest stable version of Pulsion"
+else
+	echo "Get Pulsion failed"
+fi

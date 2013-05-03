@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Environment variables
+TEMPORARY_FOLDER="/tmp/Pulsion/$RANDOM"
+SCRIPT_PATH="`pwd`"
+LOCAL_SCRIPT_PULSION_PATH="$SCRIPT_PATH/scripts/pulsion"
+CONFIG_FILE="scripts/config_pulsion"
+COMMAND="default"
+ACTION="process" # { process, help }
+VERBOSE=1 # { 1=high importance only, 5=all importance }
+
+# Gère le lecture des paramètres passés à la console
+function overload_environment_variables {
+
+	command_set=0
+	help_mode=0
+
+	while test $# -gt 0
+	do
+	        case "$1" in
+
+	                -c)		# Path to configuration file
+	                        shift
+	                        if test $# -gt 0; then
+	                                CONFIG_FILE=$1
+	                        else
+	                                echo "-c option wait a config file path"
+	                                exit 1
+	                        fi
+	                        shift
+	                        ;;
+
+	                -v)		# Level du mode verbose
+							shift
+							VERBOSE=$1
+							shift
+							;;
+
+					--help*) # Display help for one command
+							ACTION="help"
+							break
+							;;
+
+					-h)		
+							ACTION="help"
+							break
+							;;
+
+	                *)		# Concatène la commande et les paramètres
+							if [ $command_set -eq 0 ]; then
+								COMMAND=$1
+								command_set=1
+							else
+								ACTION="$ACTION $1"								
+							fi							
+	                        shift
+	                        ;;
+
+	        esac
+
+	done
+
+	COMMAND="command_$COMMAND"
+
+}

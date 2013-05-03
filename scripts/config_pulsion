@@ -1,0 +1,155 @@
+#!/bin/bash
+
+development_folder="library"
+output_folder="output"
+tests_folder="tests"
+temporary_fusion_folder="$TEMPORARY_FOLDER/fusion"
+fusionned_file_path="$output_folder/pulsion"
+fusionned_file_path_fail="$output_folder/pulsion_fusion_failed"
+console_project_path="$development_folder/pulsion"
+config_test_path="$tests_folder/include/config_pulsion"
+
+function command_test {
+
+	function help {
+
+		echo "Lauch the tests on development file"
+		echo "  -m  Launch the tests on fusionned file"
+		echo "  -mf Launch the tests on fail fusionned file"
+
+	}
+
+	function process {
+
+		# Choose the console to test
+		console=$console_project_path
+		mode="Development mode"
+
+		if [[ $1 == "-m" ]]; then
+			console=$fusionned_file_path
+			mode="Fusion mode"
+		elif [[ $1 == "-mf" ]]; then
+			console=$fusionned_file_path_fail
+			mode="Fusion fail mode"
+		fi
+
+		echo -e "- Load the tests with : $mode \n"
+
+		# Test the development version
+		for test_file in tests/test_*
+		do
+			echo "- Test the file $test_file"
+			./scripts/extern/shunit2 "$test_file" "$console" "$config_test_path"\
+			| sed -e 's/^/  -/' | sed -e 's/-ASSERT/  -ASSERT/g'
+			echo;
+		done
+
+	}
+
+}
+
+function command_fusion {
+
+	function help {
+
+		echo "Fusion all the library scripts in one file and execute the tests if necessary"
+		echo "  -t         Launch the test on the fusionned file if success"
+		echo "  -t --force Launch the test on the fusionned file if fail or success"
+
+	}
+
+	function process {
+
+		echo -e "\n- Initialize fusion tool"
+
+		mkdir -p $temporary_fusion_folder
+		tmp_fusionned_file="$temporary_fusion_folder/$RANDOM"
+		tests_option=0
+		sed_options="-i"
+
+		if [[ $(get_platform) == "osx" ]]; then
+			sed_options="-i ''"
+		fi
+
+		echo -e "\n- Read #include instructions"
+
+		# get an array of files to include detect with syntax "\. [thefile] #include"
+		cat $console_project_path > $tmp_fusionned_file
+		sources=(`cat $console_project_path | grep -E "\. (.*?) #include" | awk -F " " '{print $2}'`)
+		success=1
+
+		echo -e "\n- Fusion in progress"
+
+		for file in ${sources[@]}
+		do
+
+			# if the file to include exists
+			if [ -f $file ]; then
+
+				# define the #include line to replace
+				old=$(echo "\. $file #include" | sed 's/\//\\\//g')
+
+				# get and escape all the content of the target file
+				new=$(tail -n +2 $file | sed 's/\//\\\//g' | sed -e 'H;${x;s/\n/||||||/g;s/^,//;p;};d')
+
+				# replace the content in temporary file
+				sed $sed_options "s/$old/$new/g" $tmp_fusionned_file
+				sed $sed_options 's/||||||/\'$'\n/g' $tmp_fusionned_file
+
+				echo "  - fusionned $file"
+
+			else
+
+				# remove the include line
+				old=$(echo "\. $file #include" | sed 's/\//\\\//g')
+				sed $sed_options "s/$old//g" $tmp_fusionned_file
+
+				echo "  - not found $file"
+				success=0
+				
+			fi
+
+		done
+
+		# display the result
+		if [ $success -eq 0 ]; then
+			fusion_state="failed"
+			fusion_output=$fusionned_file_path_fail
+
+			# Program automatic launch of the test on fail minimized file
+			if [[ $1 == "-t" ]]; then
+				if [[ $2 == "--force" ]]; then
+					tests_option="-mf"
+				fi
+			fi
+		else
+			fusion_state="successed"
+			fusion_output=$fusionned_file_path
+
+			# Program automatic launch of the test on fail minimized file
+			if [[ $1 == "-t" ]]; then
+				tests_option="-m"
+			fi
+		fi
+
+		cp $tmp_fusionned_file $fusion_output
+		chmod +x $fusion_output
+
+		echo -e "\n- Fusion $fusion_state"
+		echo -e "  - script available under $fusion_output"
+
+		# Launch the tests if necessary
+		if [[ $tests_option != 0 ]]; then
+			echo -e "  - launch the tests\n"
+			echo -e "--------------------------------------------------------\n"
+			$LOCAL_SCRIPT_PULSION_PATH test $tests_option -c $CONFIG_FILE
+		else
+			echo "  - don't launch the tests (-h for more informations)"
+		fi
+
+		echo;
+
+	}
+
+}
+
