@@ -3,7 +3,7 @@
 # Environment variables
 TEMPORARY_FOLDER="/tmp/Pulsion/$RANDOM"
 SCRIPT_PATH="`pwd`"
-LOCAL_SCRIPT_PULSION_PATH="$SCRIPT_PATH/scripts/pulsion"
+LOCAL_SCRIPT_PULSION_PATH="$(dirname "${BASH_SOURCE[0]}")/pulsion"
 CONFIG_FILE="scripts/config_pulsion"
 COMMAND="default"
 ACTION="process" # { process, help }

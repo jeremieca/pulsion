@@ -90,8 +90,8 @@ function command_fusion {
 				old=$(echo "\. $file #include" | sed 's/\//\\\//g')
 
 				# get and escape all the content of the target file
-				new=$(tail -n +2 $file | sed 's/\//\\\//g' | sed -e 'H;${x;s/\n/||||||/g;s/^,//;p;};d')
-
+				new=$(tail -n +2 $file | sed 's/\//\\\//g' | sed 's/&/\\&/g' | sed -e 'H;${x;s/\n/||||||/g;s/^,//;p;};d')
+				
 				# replace the content in temporary file
 				sed $sed_options "s/$old/$new/g" $tmp_fusionned_file
 				sed $sed_options 's/||||||/\'$'\n/g' $tmp_fusionned_file
