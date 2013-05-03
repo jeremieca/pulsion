@@ -9,10 +9,15 @@ The high productivity library to develop development tools in bash. The reposito
 
 ## Complete the installation of project
 
-You must get the last fusionned version of Pulsion script.  
+You must get the last fusionned version of Pulsion script :  
 
     :::shell 
         sudo scripts/get_pulsion  
+
+Then, you can access to the pulsion application with the following command :  
+
+    :::shell 
+        sudo scripts/pulsion  
 
 ## Struture of branches
 
