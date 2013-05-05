@@ -62,6 +62,41 @@ function get_platform {
 
 }
 
+function hasParam { # TODO
+
+	search=$1
+	shift
+	for param in "$@"
+	do
+		if [[ "$param" == "$search" ]]; then
+			return 0
+		fi
+	done
+
+	return 1
+
+}
+
+function getParamValue { # TODO
+
+	search=$1
+	next=0
+
+	shift
+	for param in "$@"
+	do
+		if [[ "$param" == "$search" ]]; then
+			next=1			
+		elif [ $next -eq 1 ]; then
+			echo "$param"
+			return 0
+		fi
+	done
+
+	return 1
+
+}
+
 # Display or not the param $1 depending on the verbose level
 function verbose {
 

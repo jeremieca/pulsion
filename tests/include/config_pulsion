@@ -15,3 +15,29 @@ function command_hello {
 	}
 
 }
+
+function command_parameters {
+
+	function help {
+
+		echo "Usage : parameters"
+
+	}
+
+	function process {
+
+		#the test parameters : --force lol -t ok -o
+
+		# Must display "ok"
+		if hasParam -t "$@"; then
+			getParamValue -t "$@"
+		fi
+
+		# Must display nothing
+		if hasParam -o "$@"; then
+			getParamValue -o "$@"
+		fi
+
+	}
+
+}

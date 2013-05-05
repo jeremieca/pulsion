@@ -53,3 +53,11 @@ test_installer() {
 			   "[ `echo $installation | grep -c "install_notfoundinstallercommand function implementation does not exist"` -eq 1 ]"
 
 }
+
+# Test parameters reader
+test_parameter_reader() {
+
+	counter=`$CONSOLE parameters --force ecran machine -t ok xd | grep -c "ok"`
+	assertTrue "Read of parameters failed" "[ ${counter} -eq 1 ]"
+
+}
