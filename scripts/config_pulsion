@@ -9,6 +9,27 @@ fusionned_file_path_fail="$output_folder/pulsion_fusion_failed"
 console_project_path="$development_folder/pulsion"
 config_test_path="$tests_folder/include/config_pulsion"
 
+function command_update-to-local-version {
+
+	function help {
+
+		echo -e "Update Pulsion script to the fusionned version"
+
+	}
+
+	function process {
+
+		if [ -f "output/pulsion" ]; then
+
+			rm scripts/pulsion
+			cp output/pulsion scripts/pulsion
+
+		fi
+
+	}
+
+}
+
 function command_test {
 
 	function help {
