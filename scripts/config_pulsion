@@ -4,8 +4,8 @@ development_folder="library"
 output_folder="output"
 tests_folder="tests"
 temporary_fusion_folder="$TEMPORARY_FOLDER/fusion"
-fusionned_file_path="$output_folder/pulsion"
-fusionned_file_path_fail="$output_folder/pulsion_fusion_failed"
+fusioned_file_path="$output_folder/pulsion"
+fusioned_file_path_fail="$output_folder/pulsion_fusion_failed"
 console_project_path="$development_folder/pulsion"
 config_test_path="$tests_folder/include/config_pulsion"
 
@@ -13,7 +13,7 @@ function command_update-to-local-version {
 
 	function help {
 
-		echo -e "Update Pulsion script to the fusionned version"
+		echo -e "Update Pulsion script to the merged version"
 
 	}
 
@@ -34,9 +34,9 @@ function command_test {
 
 	function help {
 
-		echo "Lauch the tests on development file"
-		echo "  -m  Launch the tests on fusionned file"
-		echo "  -mf Launch the tests on fail fusionned file"
+		echo "Launch the tests on library file by default"
+		echo "  -f  Launch the tests on merged file success"
+		echo "  -ff Launch the tests on merged file failed"
 
 	}
 
@@ -46,11 +46,11 @@ function command_test {
 		console=$console_project_path
 		mode="Development mode"
 
-		if [[ $1 == "-m" ]]; then
-			console=$fusionned_file_path
+		if hasParam -f "$@"; then
+			console=$fusioned_file_path
 			mode="Fusion mode"
-		elif [[ $1 == "-mf" ]]; then
-			console=$fusionned_file_path_fail
+		elif hasParam -ff "$@"; then
+			console=$fusioned_file_path_fail
 			mode="Fusion fail mode"
 		fi
 
@@ -74,8 +74,8 @@ function command_fusion {
 	function help {
 
 		echo "Fusion all the library scripts in one file and execute the tests if necessary"
-		echo "  -t         Launch the test on the fusionned file if success"
-		echo "  -t --force Launch the test on the fusionned file if fail or success"
+		echo "  -t         Launch the test on the merged file if success"
+		echo "  -t --force Force to launch the tests on file merged failed if failed"
 
 	}
 
@@ -84,7 +84,7 @@ function command_fusion {
 		echo -e "\n- Initialize fusion tool"
 
 		mkdir -p $temporary_fusion_folder
-		tmp_fusionned_file="$temporary_fusion_folder/$RANDOM"
+		tmp_fusioned_file="$temporary_fusion_folder/$RANDOM"
 		tests_option=0
 		sed_options="-i"
 
@@ -94,8 +94,8 @@ function command_fusion {
 
 		echo -e "\n- Read #include instructions"
 
-		# get an array of files to include detect with syntax "\. [thefile] #include"
-		cat $console_project_path > $tmp_fusionned_file
+		# get an array of files to include detect with syntax "\. [the file] #include"
+		cat $console_project_path > $tmp_fusioned_file
 		sources=(`cat $console_project_path | grep -E "\. (.*?) #include" | awk -F " " '{print $2}'`)
 		success=1
 
@@ -114,16 +114,16 @@ function command_fusion {
 				new=$(tail -n +2 $file | sed 's/\//\\\//g' | sed 's/&/\\&/g' | sed -e 'H;${x;s/\n/||||||/g;s/^,//;p;};d')
 				
 				# replace the content in temporary file
-				sed $sed_options "s/$old/$new/g" $tmp_fusionned_file
-				sed $sed_options 's/||||||/\'$'\n/g' $tmp_fusionned_file
+				sed $sed_options "s/$old/$new/g" $tmp_fusioned_file
+				sed $sed_options 's/||||||/\'$'\n/g' $tmp_fusioned_file
 
-				echo "  - fusionned $file"
+				echo "  - fusioned $file"
 
 			else
 
 				# remove the include line
 				old=$(echo "\. $file #include" | sed 's/\//\\\//g')
-				sed $sed_options "s/$old//g" $tmp_fusionned_file
+				sed $sed_options "s/$old//g" $tmp_fusioned_file
 
 				echo "  - not found $file"
 				success=0
@@ -135,25 +135,25 @@ function command_fusion {
 		# display the result
 		if [ $success -eq 0 ]; then
 			fusion_state="failed"
-			fusion_output=$fusionned_file_path_fail
+			fusion_output=$fusioned_file_path_fail
 
 			# Program automatic launch of the test on fail minimized file
-			if [[ $1 == "-t" ]]; then
-				if [[ $2 == "--force" ]]; then
+			if hasParam -t "$@"; then
+				if hasParam --force "$@"; then
 					tests_option="-mf"
 				fi
 			fi
 		else
-			fusion_state="successed"
-			fusion_output=$fusionned_file_path
+			fusion_state="succeed"
+			fusion_output=$fusioned_file_path
 
 			# Program automatic launch of the test on fail minimized file
-			if [[ $1 == "-t" ]]; then
+			if hasParam -t "$@"; then
 				tests_option="-m"
 			fi
 		fi
 
-		cp $tmp_fusionned_file $fusion_output
+		cp $tmp_fusioned_file $fusion_output
 		chmod +x $fusion_output
 
 		echo -e "\n- Fusion $fusion_state"
