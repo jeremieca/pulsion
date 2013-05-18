@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Return 0 (true) if the function in param $1 exist
-function is_function_exist {
+# Return 0 (true) if the command in param $1 exist
+# Usage : if is_command_exist $1; then
+function is_command_exist {
 
 	if [ $# -ne 1 ]; then
 		return 1
@@ -13,7 +14,23 @@ function is_function_exist {
 
 	return 1
 
-} 
+}
+
+# Return 0 (true) if the function in param $1 exist
+# Usage : if is_function_exist $1; then
+function is_function_exist {
+
+	if [ $# -ne 1 ]; then
+		return 1
+	fi
+
+	if type -t $1 | grep -q "^function$" ; then
+		return 0
+	fi
+
+	return 1
+
+}
 
 # Return 0 (true) if the root mode is activated
 function is_root {
@@ -51,6 +68,7 @@ function temporary_folder_remove {
 }
 
 # Display the platform
+# Usage : if [[ $(get_platform) != "osx" ]];
 function get_platform {
 
 	unamestr=`uname`

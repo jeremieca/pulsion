@@ -1,0 +1,5 @@
+#!/bin/bash
+
+DEPLOY_CONF_FOLDER_CONFIG="{config}"
+DEPLOY_CONF_FOLDER_PROJECT="{project}"
+DEPLOY_CONF_FOLDER_DEPLOY="{deploy}"

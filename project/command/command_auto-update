@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function command_auto-update {
+
+	function help {
+
+		echo -e "  Update Pulsion script to the latest version available on bitbucket master branch"
+		echo -e "  Usage : auto-update"
+
+	}
+
+	function process {
+
+		scripts/get_pulsion
+
+	}
+
+}

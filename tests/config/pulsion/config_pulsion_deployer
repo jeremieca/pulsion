@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Specially for test, force configuration deployment file path
+DEPLOYMENT_CONFURATION_FILE_PATH="tests/tmp/deploy_config"
+
+function deploy_tmpProject {
+
+	function pre_actions_in_local_folder { # In local folder
+
+		touch pre.actions
+
+	}
+
+	function list_local_files_to_export { # In local folder
+
+		git ls-files && git ls-files --other --exclude-standard
+
+	}
+
+	function list_deploy_files_to_remove { # In deploy folder - pulse_update
+
+		echo "file_to_remove"
+
+	}
+
+	function post_actions_in_config_folder { # In config folder
+
+		touch post.actions
+
+	}
+
+}

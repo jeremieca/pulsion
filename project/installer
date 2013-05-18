@@ -10,12 +10,12 @@ function install {
 
 	install_cmd="install_$1"
 
-	if is_function_exist $1; then
+	if is_command_exist $1; then
 		verbose 3 "  - $1 is already installed"
 		return 0
 	else
 		
-		if ! type -t $install_cmd | grep -q "^function$" ; then
+		if ! is_function_exist "$install_cmd" ; then
 
 			verbose 1 "  - install_$1 function implementation does not exist"
 			verbose 2 "    - $1 install failed"
@@ -31,7 +31,7 @@ function install {
 
 		temporary_folder_remove
 		
-		if is_function_exist $1; then
+		if is_command_exist $1; then
 			verbose 1 "    - $1 is installed"
 			return 0
 		else

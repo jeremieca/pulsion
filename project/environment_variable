@@ -8,6 +8,7 @@ CONFIG_FILE="scripts/config_pulsion"
 COMMAND="default"
 ACTION="process" # { process, help }
 VERBOSE=1 # { 1=high importance only, 5=all importance }
+DEPLOYMENT_CONFURATION_FILE_PATH="config/deploy_config"
 
 # Gère le lecture des paramètres passés à la console
 function overload_environment_variables {

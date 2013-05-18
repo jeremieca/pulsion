@@ -1,13 +1,13 @@
 #!/bin/bash
 
-development_folder="library"
+development_folder="project"
 output_folder="output"
 tests_folder="tests"
 temporary_fusion_folder="$TEMPORARY_FOLDER/fusion"
 fusioned_file_path="$output_folder/pulsion"
 fusioned_file_path_fail="$output_folder/pulsion_fusion_failed"
 console_project_path="$development_folder/pulsion"
-config_test_path="$tests_folder/include/config_pulsion"
+config_test_path="$tests_folder/config/pulsion/config_pulsion"
 
 function command_update-to-local-version {
 
@@ -19,10 +19,10 @@ function command_update-to-local-version {
 
 	function process {
 
-		if [ -f "output/pulsion" ]; then
+		if [ -f "$output_folder/pulsion" ]; then
 
 			rm scripts/pulsion
-			cp output/pulsion scripts/pulsion
+			cp $output_folder/pulsion scripts/pulsion
 
 		fi
 
@@ -34,7 +34,7 @@ function command_test {
 
 	function help {
 
-		echo "Launch the tests on library file by default"
+		echo "Launch the tests on project folder by default"
 		echo "  -f  Launch the tests on merged file success"
 		echo "  -ff Launch the tests on merged file failed"
 
@@ -73,7 +73,7 @@ function command_fusion {
 
 	function help {
 
-		echo "Fusion all the library scripts in one file and execute the tests if necessary"
+		echo "Fusion all the project folder's scripts in one file and execute the tests if necessary"
 		echo "  -t         Launch the test on the merged file if success"
 		echo "  -t --force Force to launch the tests on file merged failed if failed"
 
@@ -111,12 +111,11 @@ function command_fusion {
 				old=$(echo "\. $file #include" | sed 's/\//\\\//g')
 
 				# get and escape all the content of the target file
-				new=$(tail -n +2 $file | sed 's/\//\\\//g' | sed 's/&/\\&/g' | sed -e 'H;${x;s/\n/||||||/g;s/^,//;p;};d')
-				
+				new=$(tail -n +2 $file | sed 's/\\/\\\\/g' | sed 's/\//\\\//g' | sed 's/&/\\&/g' | sed -e 'H;${x;s/\n/||||||/g;s/^,//;p;};d')
+
 				# replace the content in temporary file
 				sed $sed_options "s/$old/$new/g" $tmp_fusioned_file
 				sed $sed_options 's/||||||/\'$'\n/g' $tmp_fusioned_file
-
 				echo "  - fusioned $file"
 
 			else
@@ -140,7 +139,7 @@ function command_fusion {
 			# Program automatic launch of the test on fail minimized file
 			if hasParam -t "$@"; then
 				if hasParam --force "$@"; then
-					tests_option="-mf"
+					tests_option="-ff"
 				fi
 			fi
 		else
@@ -149,7 +148,7 @@ function command_fusion {
 
 			# Program automatic launch of the test on fail minimized file
 			if hasParam -t "$@"; then
-				tests_option="-m"
+				tests_option="-f"
 			fi
 		fi
 
@@ -169,6 +168,9 @@ function command_fusion {
 		fi
 
 		echo;
+
+		# Remove temproray folder
+		rm -Rf $TEMPORARY_FOLDER
 
 	}
 
