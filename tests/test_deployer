@@ -26,17 +26,25 @@ test_deploy_process() {
 	git_untracked="untracked_git_file.cpp"             # 1 occurs if config_pulsion_deployer is ok
 	pre_action="pre.actions"                           # 1 occurs
 	post_action="post.actions"                         # 1 occurs
+	get_deploy_folder="$temporary_deploy_folder"	   # 1 occurs because of config_pulsion_deployer post_actions
+	get_config_folder="$temporary_config_folder"       # 1 occurs
+	get_local_folder="$temporary_local_folder"         # 1 occurs
+	fail_read_parameter="! Fail"					   # 0 occurs
 
 	# Get all outputs for tests
-	output=$($(echo $CONSOLE)_deployer deploy -p tmpProject -v 3 --force)
+	output=$($(echo $CONSOLE)_deployer deploy -p tmpProject -v 3 --force --param_sup)
 	local_folder=$(ls -Rah $temporary_local_folder)
 	deploy_folder=$(ls -Rah $temporary_deploy_folder)
 	config_folder=$(ls -Rah $temporary_config_folder)
 
 	# Test the console output
 	assertTrue "'$file_to_remove' must be found" "[ $(echo "$output" | grep -c "$file_to_remove") -eq 1 ]"
+	assertTrue "'$get_deploy_folder' must be found" "[ $(echo "$output" | grep -c "$get_deploy_folder") -eq 1 ]"
+	assertTrue "'$get_config_folder' must be found" "[ $(echo "$output" | grep -c "$get_config_folder") -eq 1 ]"
+	assertTrue "'$get_local_folder' must be found" "[ $(echo "$output" | grep -c "$get_local_folder") -ge 1 ]"
 	assertTrue "'$pre_action' must be found" "[ $(echo "$output" | grep -c "$pre_action") -ge 1 ]"
 	assertTrue "'$ignored_file' must NOT be found" "[ $(echo "$output" | grep -c "$ignored_file") -eq 0 ]"
+	assertTrue "'$fail_read_parameter' must NOT be found\n    $(echo "$output" | grep "$fail_read_parameter")" "[ $(echo "$output" | grep -c "$fail_read_parameter") -eq 0 ]"
 	assertTrue "'$file_to_not_remove' must NOT be found" "[ $(echo "$output" | grep -c "$file_to_not_remove") -eq 0 ]"
 	assertTrue "'$git_tracked' must be found" "[ $(echo "$output" | grep -c "$git_tracked") -eq 1 ]"
 	assertTrue "'$git_untracked' must be found" "[ $(echo "$output" | grep -c "$git_untracked") -eq 1 ]"
@@ -45,6 +53,8 @@ test_deploy_process() {
 	# Test the folders output
 	assertTrue "$pre_action must be found in local folder" "[ $(echo "$local_folder" | grep -c "$pre_action") -eq 1 ]"
 	assertTrue "$post_action must be found in config folder" "[ $(echo "$config_folder" | grep -c "$post_action") -eq 1 ]"
+
+	#echo "$output" # Debug
 
 	# Reset all environment
 	remove_folders

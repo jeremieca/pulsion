@@ -4,6 +4,11 @@
 
 function command_deploy {
 
+	# Define project_folder, config_folder and deploy_folder
+	project_folder="$SCRIPT_PATH/project"
+	config_folder="$SCRIPT_PATH/config"
+	deploy_folder="" # No default value
+
 	function help {
 
 		echo ""
@@ -43,10 +48,7 @@ function command_deploy {
 		verbose 1 "- Read "deploy_$deploy_name" project"
 		deploy_$deploy_name
 
-		# Define project_folder, config_folder and deploy_folder
-		project_folder="$SCRIPT_PATH/project"
-		config_folder="$SCRIPT_PATH/config"
-		deploy_folder="" # No default value
+		# Default folder path define in head
 
 		## Project folder
 		if [[ $DEPLOY_CONF_FOLDER_PROJECT != "" ]]; then
@@ -107,7 +109,7 @@ function command_deploy {
 
 		 		verbose 1 "    - Erase"
 	 			cd $deploy_folder
-	 			for f in $($list_deploy_cmd)
+	 			for f in $($list_deploy_cmd "$@")
 	 			do
 	 				if [[ $f != "." ]] && [[ $f != ".." ]]; then
 	 					rm -Rf "$f"
@@ -124,11 +126,11 @@ function command_deploy {
 			cd $project_folder
 			
 			verbose 1 "  - Launch pre-actions in local folder"
-			$pre_cmd
+			$pre_cmd "$@"
 
 			verbose 1 "  - Copying files from local to deploy folder..."
 			# Get the full name of 
-			for initial_file in $($list_local_cmd)
+			for initial_file in $($list_local_cmd "$@")
 			do
 				if [[ $initial_file != "." ]] && [[ $initial_file != ".." ]]; then
 
@@ -152,7 +154,7 @@ function command_deploy {
 			# Execute post actions in the config folder
 			verbose 1 "  - Launch post-actions in config folder"
 			cd $config_folder
-			$post_cmd
+			$post_cmd "$@"
 
 		)
 
@@ -181,5 +183,24 @@ function command_deploy {
 		return 0
 
 	}
+
+	function get_local_folder {
+
+		echo "$project_folder"
+
+	}
+
+	function get_config_folder {
+
+		echo "$config_folder"
+
+	}
+
+	function get_deploy_folder {
+
+		echo "$deploy_folder"
+
+	}
+
 
 }

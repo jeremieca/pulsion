@@ -8,6 +8,14 @@ function deploy_tmpProject {
 	function pre_actions_in_local_folder { # In local folder
 
 		touch pre.actions
+		
+		get_local_folder
+		get_config_folder
+		get_deploy_folder
+
+		if ! hasParam --param_sup "$@"; then
+			echo "! Fail pre actions parameters"
+		fi
 
 	}
 
@@ -15,17 +23,29 @@ function deploy_tmpProject {
 
 		git ls-files && git ls-files --other --exclude-standard
 
+		if ! hasParam --param_sup "$@"; then
+			echo "! Fail list local parameters"
+		fi
+
 	}
 
 	function list_deploy_files_to_remove { # In deploy folder - pulse_update
 
 		echo "file_to_remove"
 
+		if ! hasParam --param_sup "$@"; then
+			echo "! Fail list deploy parameters"
+		fi
+
 	}
 
 	function post_actions_in_config_folder { # In config folder
 
 		touch post.actions
+
+		if ! hasParam --param_sup "$@"; then
+			echo "! Fail post actions parameters"
+		fi
 
 	}
 

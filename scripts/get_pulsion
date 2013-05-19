@@ -4,19 +4,30 @@
 INSTALL_PATH="$(pwd)/scripts"
 TEMPORARY_FOLDER="/tmp/PulsionInstall/$RANDOM"
 
+# Select branch to import
+branch="master"
+if [ $# -eq 1 ]; then
+	branch="$1"
+fi
+
 # Clone in temporary folder
 sudo mkdir -p $TEMPORARY_FOLDER
 cd $TEMPORARY_FOLDER
 sudo git clone https://jeremieca@bitbucket.org/deescut/pulsion.git
 cd pulsion
-sudo git checkout master
+sudo git checkout $branch
 
 # Fusion and copy
-sudo ./library/pulsion fusion -t
+sudo ./project/pulsion fusion -t
 if [ -f output/pulsion ]; then
 	sudo cp output/pulsion $INSTALL_PATH
 	sudo chmod +x $INSTALL_PATH/pulsion
-	echo "You have now the latest stable version of Pulsion"
+	if [[ $branch == "master" ]]; then
+		echo "You have now the latest stable version of Pulsion"
+	else
+		echo "You have now the latest version of Pulsion in $branch"
+	fi
+	
 else
 	echo "Get Pulsion failed"
 fi
