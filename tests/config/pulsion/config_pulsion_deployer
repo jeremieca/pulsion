@@ -5,6 +5,12 @@ DEPLOYMENT_CONFURATION_FILE_PATH="tests/tmp/deploy_config"
 
 function deploy_tmpProject {
 
+	function help {
+
+		echo "Aditionnal help"
+
+	}
+
 	function pre_actions_in_local_folder { # In local folder
 
 		touch pre.actions

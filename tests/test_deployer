@@ -30,14 +30,17 @@ test_deploy_process() {
 	get_config_folder="$temporary_config_folder"       # 1 occurs
 	get_local_folder="$temporary_local_folder"         # 1 occurs
 	fail_read_parameter="! Fail"					   # 0 occurs
+	help_additional_infos="Aditionnal help"			   # 1 occurs
 
 	# Get all outputs for tests
 	output=$($(echo $CONSOLE)_deployer deploy -p tmpProject -v 3 --force --param_sup)
 	local_folder=$(ls -Rah $temporary_local_folder)
 	deploy_folder=$(ls -Rah $temporary_deploy_folder)
 	config_folder=$(ls -Rah $temporary_config_folder)
+	help_infos=$($(echo $CONSOLE)_deployer deploy -p tmpProject -h)
 
 	# Test the console output
+	assertTrue "'$help_additional_infos' must be found" "[ $(echo "$help_infos" | grep -c "$help_additional_infos") -eq 1 ]"
 	assertTrue "'$file_to_remove' must be found" "[ $(echo "$output" | grep -c "$file_to_remove") -eq 1 ]"
 	assertTrue "'$get_deploy_folder' must be found" "[ $(echo "$output" | grep -c "$get_deploy_folder") -eq 1 ]"
 	assertTrue "'$get_config_folder' must be found" "[ $(echo "$output" | grep -c "$get_config_folder") -eq 1 ]"

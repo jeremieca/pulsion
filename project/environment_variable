@@ -15,6 +15,7 @@ function overload_environment_variables {
 
 	command_set=0
 	help_mode=0
+	initial_params="$@"
 
 	while test $# -gt 0
 	do
@@ -38,12 +39,12 @@ function overload_environment_variables {
 							;;
 
 					--help*) # Display help for one command
-							ACTION="help"
+							ACTION="help $initial_params"
 							break
 							;;
 
 					-h)		
-							ACTION="help"
+							ACTION="help $initial_params"
 							break
 							;;
 

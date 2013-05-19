@@ -18,6 +18,16 @@ function command_deploy {
 		echo "    --force           Erase content of deploy folder without ask"
 		echo "    -v 3              Details about copied and erased files"
 
+		# Load config_pulsion deployment module depending on project_name { default: "project" }
+		deploy_name="project"
+		if hasParam -p "$@"; then
+			deploy_name="$(getParamValue -p "$@")"
+			if [[ $deploy_name == "" ]]; then return 0; fi
+		fi
+		if ! is_function_exist deploy_$deploy_name; then return 0; fi
+		deploy_$deploy_name
+		help
+
 	}
 
 	function process {
