@@ -16,6 +16,16 @@ function is_command_exist {
 
 }
 
+# Exit if user is not root
+function require_root {
+	
+	if ! is_root; then
+		echo "Usage : sudo scripts/console"
+		exit 1
+	fi
+
+}
+
 # Return 0 (true) if the function in param $1 exist
 # Usage : if is_function_exist $1; then
 function is_function_exist {

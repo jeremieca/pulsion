@@ -41,6 +41,8 @@ function command_test {
 	}
 
 	function process {
+		
+		require_root
 
 		# Choose the console to test
 		console=$console_project_path
@@ -80,6 +82,8 @@ function command_fusion {
 	}
 
 	function process {
+
+		require_root
 
 		echo -e "\n- Initialize fusion tool"
 

@@ -31,6 +31,8 @@ function command_deploy {
 	}
 
 	function process {
+		
+		#require_root
 
 		verbose 1 "- Load deploy configuration"
 
@@ -54,6 +56,8 @@ function command_deploy {
 			verbose 1 "  - Don't found implementation for deploy_$deploy_name"
 			return 1
 		fi
+
+		require_root
 
 		verbose 1 "- Read "deploy_$deploy_name" project"
 		deploy_$deploy_name
