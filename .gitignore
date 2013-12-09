@@ -1,3 +1,1 @@
-# include output/.gitignore
-scripts/pulsion
-.DS_Store
+project/ignored_file.php

@@ -1,0 +1,593 @@
+#!/bin/bash
+
+# Pulsion console
+#
+# All users scripts are in the config pulsion file
+# Usage : sudo ./scripts/pulsion [[Config pulsion file]]
+# Default config pulsion file parameter is set to scripts/config_pulsion
+#
+
+
+
+# Environment variables
+TEMPORARY_FOLDER="/tmp/Pulsion/$RANDOM"
+SCRIPT_PATH="`pwd`"
+LOCAL_SCRIPT_PULSION_PATH="$(dirname "${BASH_SOURCE[0]}")/pulsion"
+CONFIG_FILE="scripts/config_pulsion"
+COMMAND="default"
+ACTION="process" # { process, help }
+VERBOSE=1 # { 1=high importance only, 5=all importance }
+DEPLOYMENT_CONFURATION_FILE_PATH="config/deploy_config"
+
+# Gère le lecture des paramètres passés à la console
+function overload_environment_variables {
+
+	command_set=0
+	help_mode=0
+	initial_params="$@"
+
+	while test $# -gt 0
+	do
+	        case "$1" in
+
+	                -c)		# Path to configuration file
+	                        shift
+	                        if test $# -gt 0; then
+	                                CONFIG_FILE=$1
+	                        else
+	                                echo "-c option wait a config file path"
+	                                exit 1
+	                        fi
+	                        shift
+	                        ;;
+
+	                -v)		# Level du mode verbose
+							shift
+							VERBOSE=$1
+							shift
+							;;
+
+					--help*) # Display help for one command
+							ACTION="help $initial_params"
+							break
+							;;
+
+					-h)		
+							ACTION="help $initial_params"
+							break
+							;;
+
+	                *)		# Concatène la commande et les paramètres
+							if [ $command_set -eq 0 ]; then
+								COMMAND=$1
+								command_set=1
+							else
+								ACTION="$ACTION $1"								
+							fi							
+	                        shift
+	                        ;;
+
+	        esac
+
+	done
+
+	COMMAND="command_$COMMAND"
+
+}
+
+
+function launch_framework {
+
+	# Use sudo for install
+	if ! is_root; then
+		echo "Usage : sudo scripts/console"
+		exit 1
+	fi
+
+	# Set the environment variables with parameters
+	overload_environment_variables "$@"
+
+	# Load configuration file
+	if [ -f $CONFIG_FILE ]; then
+		verbose 3 "- Load the default configuration script: $CONFIG_FILE"
+		source $CONFIG_FILE
+	else
+		verbose 1 "- Invalid configuration file: $CONFIG_FILE"
+		exit 1
+	fi
+
+	# Verify existance and launch $command
+	if ! type -t $COMMAND | grep -q "^function$" ; then
+
+		verbose 1 "- \"$COMMAND\" function implementation does not exist"
+		exit 1
+
+	fi
+
+	$COMMAND
+	$ACTION
+
+}
+
+
+# Return 0 (true) if the command in param $1 exist
+# Usage : if is_command_exist $1; then
+function is_command_exist {
+
+	if [ $# -ne 1 ]; then
+		return 1
+	fi
+
+	if which $1 > /dev/null; then
+		return 0
+	fi
+
+	return 1
+
+}
+
+# Return 0 (true) if the function in param $1 exist
+# Usage : if is_function_exist $1; then
+function is_function_exist {
+
+	if [ $# -ne 1 ]; then
+		return 1
+	fi
+
+	if type -t $1 | grep -q "^function$" ; then
+		return 0
+	fi
+
+	return 1
+
+}
+
+# Return 0 (true) if the root mode is activated
+function is_root {
+
+	if [ "$(id -u)" != "0" ]; then
+		return 1
+	fi
+	return 0
+
+}
+
+# Create the temporary folder $TEMPORARY_FOLDER that contains files for install tools
+function temporary_folder_create {
+
+	if [ -d "$TEMPORARY_FOLDER" ]; then
+		verbose 1 "Error : $TEMPORARY_FOLDER folder already exist. Remove it before install."
+		return 1
+	fi
+	if ! mkdir -p "$TEMPORARY_FOLDER"; then
+		verbose 1 "Error : $TEMPORARY_FOLDER fail to mkdir -p."
+		return 1
+	fi
+
+	cd "$TEMPORARY_FOLDER"
+	return 0
+
+}
+
+# Remove the temporary folder $TEMPORARY_FOLDER create in the begining of install
+function temporary_folder_remove {
+
+	cd $SCRIPT_PATH
+	rm -Rf $TEMPORARY_FOLDER
+
+}
+
+# Display the platform
+# Usage : if [[ $(get_platform) != "osx" ]];
+function get_platform {
+
+	unamestr=`uname`
+	if [[ "$unamestr" == 'Linux' ]]; then
+	   echo "linux"
+	elif [[ "$unamestr" == 'Darwin' ]]; then
+	   echo "osx"
+	fi
+
+}
+
+# Return true if the list of arguments contains $1
+function hasParam {
+
+	search=$1
+	shift
+	for param in "$@"
+	do
+		if [[ "$param" == "$search" ]]; then
+			return 0
+		fi
+	done
+
+	return 1
+
+}
+
+# Return the value associate to one param
+function getParamValue {
+
+	search=$1
+	next=0
+
+	shift
+	for param in "$@"
+	do
+		if [[ "$param" == "$search" ]]; then
+			next=1			
+		elif [ $next -eq 1 ]; then
+			echo "$param"
+			return 0
+		fi
+	done
+
+	return 1
+
+}
+
+# Display or not the param $1 depending on the verbose level
+function verbose {
+
+	if [ $# -eq 2 ]; then
+	
+		if [ $1 -le $VERBOSE ]; then
+			echo "$2"
+		fi
+	
+	fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Install command call install_[command] function if necessary
+function install {
+
+	if [ $# -ne 1 ]; then
+		verbose 1 "Usage : install [command name]"
+		return 1
+	fi
+
+	install_cmd="install_$1"
+
+	if is_command_exist $1; then
+		verbose 3 "  - $1 is already installed"
+		return 0
+	else
+		
+		if ! is_function_exist "$install_cmd" ; then
+
+			verbose 1 "  - install_$1 function implementation does not exist"
+			verbose 2 "    - $1 install failed"
+			return 1
+
+		fi
+
+		if ! temporary_folder_create; then return 1; fi
+
+		verbose 3 "  - $1 install in progress..."
+		$install_cmd > /dev/null
+		hash -r
+
+		temporary_folder_remove
+		
+		if is_command_exist $1; then
+			verbose 1 "    - $1 is installed"
+			return 0
+		else
+			verbose 1 "    - $1 install failed"
+			return 1
+		fi
+
+	fi
+
+}
+
+
+
+function command_default {
+
+	function help {
+	
+		echo "
+
+************************************************
+
+      Welcome in the pulsion application
+
+************************************************
+
+Modules available ( Config : $CONFIG_FILE )
+$(list_available command)
+
+Installers available ( Config : $CONFIG_FILE )
+$(list_available install)
+
+Parameters
+    -c [path] Config file path
+    -v [level] Mode verbose (1..5)
+    -h, --help Help for a specific command
+		
+		"
+
+	}
+
+	function process {
+
+		help
+
+	}
+
+
+}
+
+# List the available function ("command" or "install" params)
+function list_available {
+
+	if [ $# -ne 1 ]; then
+		verbose 2 "Error : Bad usage of function \"list_available\""
+		return 1
+	fi
+
+	# Get all the declared variable begining by $1 params : (command, install...)
+	list=(`declare -F | cut -d" " -f3 | grep "^$1_"`)
+
+	for item in ${list[@]}
+	do
+		if [[ "$item" != "$1_default" ]]; then
+			echo "    - ${item/$1_/}"
+		fi
+	done
+
+}
+
+
+function command_auto-update {
+
+	function help {
+
+		echo -e "  Update Pulsion script to the latest version available on bitbucket master branch"
+		echo -e "  Usage : auto-update"
+
+	}
+
+	function process {
+
+		scripts/get_pulsion
+
+	}
+
+}
+
+
+# Use file DEPLOYMENT_CONFURATION_FILE_PATH="config/deploy_config"
+
+function command_deploy {
+
+	# Define project_folder, config_folder and deploy_folder
+	project_folder="$SCRIPT_PATH/project"
+	config_folder="$SCRIPT_PATH/config"
+	deploy_folder="" # No default value
+
+	function help {
+
+		echo ""
+		echo "Deploy depending on $DEPLOYMENT_CONFURATION_FILE_PATH file"
+		echo "Usage : deploy"
+		echo "    -p [project name] Specify a project name (default: 'project')"
+		echo "    --force           Erase content of deploy folder without ask"
+		echo "    -v 3              Details about copied and erased files"
+
+		# Load config_pulsion deployment module depending on project_name { default: "project" }
+		deploy_name="project"
+		if hasParam -p "$@"; then
+			deploy_name="$(getParamValue -p "$@")"
+			if [[ $deploy_name == "" ]]; then return 0; fi
+		fi
+		if ! is_function_exist deploy_$deploy_name; then return 0; fi
+		deploy_$deploy_name
+		help
+
+	}
+
+	function process {
+
+		verbose 1 "- Load deploy configuration"
+
+		# Load the deploy_config file { default: "config/deploy_config", defined: "environment_variables" }
+		if [ ! -f "$DEPLOYMENT_CONFURATION_FILE_PATH" ]; then
+			verbose 1 "  - File '$DEPLOYMENT_CONFURATION_FILE_PATH' does not exist and must contain configuration file."
+			verbose 1 "  - Maybe you must implement '$(echo $DEPLOYMENT_CONFURATION_FILE_PATH)_default' file."
+			return 1
+		fi
+
+		. "$DEPLOYMENT_CONFURATION_FILE_PATH"
+
+		# Load config_pulsion deployment module depending on project_name { default: "project" }
+		deploy_name="project"
+		if hasParam -p "$@"; then
+			deploy_name="$(getParamValue -p "$@")"
+			if [[ $deploy_name == "" ]]; then verbose 1 "  - Project non specified with option -p"; return 1; fi
+		fi
+
+		if ! is_function_exist deploy_$deploy_name; then
+			verbose 1 "  - Don't found implementation for deploy_$deploy_name"
+			return 1
+		fi
+
+		verbose 1 "- Read "deploy_$deploy_name" project"
+		deploy_$deploy_name
+
+		# Default folder path define in head
+
+		## Project folder
+		if [[ $DEPLOY_CONF_FOLDER_PROJECT != "" ]]; then
+			if [ $(echo "$DEPLOY_CONF_FOLDER_PROJECT" | grep -c "^\/") -eq 1 ]; then
+				project_folder="$DEPLOY_CONF_FOLDER_PROJECT";
+			else
+				project_folder="$SCRIPT_PATH/$DEPLOY_CONF_FOLDER_PROJECT";
+			fi
+		fi
+		## Config folder
+		if [[ $DEPLOY_CONF_FOLDER_CONFIG != "" ]]; then
+			if [ $(echo "$DEPLOY_CONF_FOLDER_CONFIG" | grep -c "^\/") -eq 1 ]; then
+				config_folder="$DEPLOY_CONF_FOLDER_CONFIG";
+			else
+				config_folder="$SCRIPT_PATH/$DEPLOY_CONF_FOLDER_CONFIG";
+			fi
+		fi
+		## Deploy folder
+		if [[ $DEPLOY_CONF_FOLDER_DEPLOY != "" ]]; then
+			if [ $(echo "$DEPLOY_CONF_FOLDER_DEPLOY" | grep -c "^\/") -eq 1 ]; then
+				deploy_folder="$DEPLOY_CONF_FOLDER_DEPLOY";
+			else
+				deploy_folder="$SCRIPT_PATH/$DEPLOY_CONF_FOLDER_DEPLOY";
+			fi
+		else
+			# deploy_folder must be configured in deploy_config
+			verbose 1 "  - \$DEPLOY_CONF_FOLDER_DEPLOY is not defined in $DEPLOYMENT_CONFURATION_FILE_PATH"
+			return 1
+		fi
+
+		# Prepare commands name
+		pre_cmd="pre_actions_in_local_folder_default"
+		list_local_cmd="list_local_files_to_export_default"
+		list_deploy_cmd="list_deploy_files_to_remove_default"
+		post_cmd="post_actions_in_config_folder_default"
+		if is_function_exist pre_actions_in_local_folder; then pre_cmd="pre_actions_in_local_folder"; fi
+		if is_function_exist list_local_files_to_export; then list_local_cmd="list_local_files_to_export"; fi
+		if is_function_exist list_deploy_files_to_remove; then list_deploy_cmd="list_deploy_files_to_remove"; fi
+		if is_function_exist post_actions_in_config_folder; then post_cmd="post_actions_in_config_folder"; fi
+
+		# Deploying
+		verbose 1 "- Deploying..."
+
+		(IFS=$'\n'
+
+			# Empty deployment folder or create it
+			verbose 1 "  - Deploy folder"
+			if [ -d $deploy_folder ]; then
+	 			
+	 			# Deploy folder exist
+	 			if [ "$(ls -A $deploy_folder)" ] && ! hasParam --force "$@"; then
+		 			read -p "    - $deploy_folder content will be erase. Are you sure ? (y/n) " answer
+		 			if [[ $answer != "y" ]]; then
+		 				verbose 1 "      - Abort deploy"
+		 				return 1
+		 			fi
+		 		fi
+
+		 		verbose 1 "    - Erase"
+	 			cd $deploy_folder
+	 			for f in $($list_deploy_cmd "$@")
+	 			do
+	 				if [[ $f != "." ]] && [[ $f != ".." ]]; then
+	 					rm -Rf "$f"
+	 					verbose 3 "      * Remove $f"
+	 				fi
+	 			done
+		 	else
+		 		verbose 1 "    - Create"
+		 		mkdir -p $deploy_folder
+			fi
+
+
+			# Copying files
+			cd $project_folder
+			
+			verbose 1 "  - Launch pre-actions in local folder"
+			$pre_cmd "$@"
+
+			verbose 1 "  - Copying files from local to deploy folder..."
+			# Get the full name of 
+			for initial_file in $($list_local_cmd "$@")
+			do
+				if [[ $initial_file != "." ]] && [[ $initial_file != ".." ]]; then
+
+					file=$(echo $initial_file)
+					filename=$(basename $file)
+					path=$(dirname $file)
+
+					# Gère les fichier à la racine du projet
+					if [ $(echo $file | grep -c "/") -eq 0 ]; then
+						verbose 3 "    * Copy $filename"
+						cp -R "$initial_file" "$deploy_folder"
+					else
+						verbose 3 "    * Copy $path/$filename"
+						mkdir -p "$deploy_folder/$path"
+						cp -R "$initial_file" "$deploy_folder/$path"
+					fi
+
+				fi
+			done
+
+			# Execute post actions in the config folder
+			verbose 1 "  - Launch post-actions in config folder"
+			cd $config_folder
+			$post_cmd "$@"
+
+		)
+
+	}
+
+	function pre_actions_in_local_folder_default { # In local folder
+
+		return 0
+
+	}
+
+	function list_local_files_to_export_default { # In local folder
+
+		ls -a .
+
+	}
+
+	function list_deploy_files_to_remove_default { # In deploy folder
+
+		ls -a .
+
+	}
+
+	function post_actions_in_config_folder_default { # In config folder
+
+		return 0
+
+	}
+
+	function get_local_folder {
+
+		echo "$project_folder"
+
+	}
+
+	function get_config_folder {
+
+		echo "$config_folder"
+
+	}
+
+	function get_deploy_folder {
+
+		echo "$deploy_folder"
+
+	}
+
+
+}
+
+# Launch the console
+launch_framework "$@"
