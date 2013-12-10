@@ -19,6 +19,8 @@ function command_update-to-local-version {
 
 	function process {
 
+		require_root
+
 		if [ -f "$output_folder/pulsion" ]; then
 
 			rm scripts/pulsion

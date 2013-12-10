@@ -78,12 +78,6 @@ function overload_environment_variables {
 
 function launch_framework {
 
-	# Use sudo for install
-	if ! is_root; then
-		echo "Usage : sudo scripts/console"
-		exit 1
-	fi
-
 	# Set the environment variables with parameters
 	overload_environment_variables "$@"
 
@@ -123,6 +117,16 @@ function is_command_exist {
 	fi
 
 	return 1
+
+}
+
+# Exit if user is not root
+function require_root {
+	
+	if ! is_root; then
+		echo "Usage : sudo scripts/pulsion"
+		exit 1
+	fi
 
 }
 
@@ -239,6 +243,54 @@ function verbose {
 	fi
 }
 
+# Sudo is impossible directly on a function, inside a script
+# So we emulate a fake extern file with function body inside
+function exesudo {
+
+	mkdir -p /tmp/shm
+
+    local _funcname_="$1"
+    local params=( "$@" )               ## array containing all params passed here
+    local tmpfile="/tmp/shm/$RANDOM"    ## temporary file
+    local filecontent                   ## content of the temporary file
+    local regex                         ## regular expression
+    local func                          ## function source
+
+    # Shift the first param (which is the name of the function)
+    unset params[0]              ## remove first element
+    # params=( "${params[@]}" )     ## repack array
+
+    content="#!/bin/bash\n\n"
+
+    # Write the params array
+    content="${content}params=(\n"
+
+    regex="\s+"
+    for param in "${params[@]}"
+    do
+        if [[ "$param" =~ $regex ]]
+            then
+                content="${content}\t\"${param}\"\n"
+            else
+                content="${content}\t${param}\n"
+        fi
+    done
+
+    content="$content)\n"
+    echo -e "$content" > "$tmpfile"
+
+    # Append the function source
+    echo "#$( type "$_funcname_" )" >> "$tmpfile"
+
+    # Append the call to the function
+    echo -e "\n$_funcname_ \"\${params[@]}\"\n" >> "$tmpfile"
+
+
+    # Execute the temporary file with sudo
+    sudo bash "$tmpfile"
+    rm "$tmpfile"
+
+}
 
 
 
@@ -279,8 +331,9 @@ function install {
 
 		if ! temporary_folder_create; then return 1; fi
 
+		install_cmd="exesudo $install_cmd"
 		verbose 3 "  - $1 install in progress..."
-		$install_cmd > /dev/null
+	 	$install_cmd > /dev/null
 		hash -r
 
 		temporary_folder_remove
@@ -405,7 +458,7 @@ function command_deploy {
 	}
 
 	function process {
-
+		
 		verbose 1 "- Load deploy configuration"
 
 		# Load the deploy_config file { default: "config/deploy_config", defined: "environment_variables" }
@@ -428,6 +481,8 @@ function command_deploy {
 			verbose 1 "  - Don't found implementation for deploy_$deploy_name"
 			return 1
 		fi
+
+		require_root
 
 		verbose 1 "- Read "deploy_$deploy_name" project"
 		deploy_$deploy_name

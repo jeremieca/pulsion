@@ -2,12 +2,6 @@
 
 function launch_framework {
 
-	# Use sudo for install
-	#if ! is_root; then
-	#	echo "Usage : sudo scripts/console"
-	#	exit 1
-	#fi
-
 	# Set the environment variables with parameters
 	overload_environment_variables "$@"
 

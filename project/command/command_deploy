@@ -32,8 +32,6 @@ function command_deploy {
 
 	function process {
 		
-		#require_root
-
 		verbose 1 "- Load deploy configuration"
 
 		# Load the deploy_config file { default: "config/deploy_config", defined: "environment_variables" }

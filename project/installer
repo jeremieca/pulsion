@@ -25,8 +25,9 @@ function install {
 
 		if ! temporary_folder_create; then return 1; fi
 
+		install_cmd="exesudo $install_cmd"
 		verbose 3 "  - $1 install in progress..."
-		sudo $install_cmd > /dev/null
+	 	$install_cmd > /dev/null
 		hash -r
 
 		temporary_folder_remove
