@@ -59,7 +59,7 @@ function temporary_folder_create {
 		verbose 1 "Error : $TEMPORARY_FOLDER folder already exist. Remove it before install."
 		return 1
 	fi
-	if ! mkdir -p "$TEMPORARY_FOLDER"; then
+	if ! sudo mkdir -p "$TEMPORARY_FOLDER"; then
 		verbose 1 "Error : $TEMPORARY_FOLDER fail to mkdir -p."
 		return 1
 	fi
@@ -73,7 +73,7 @@ function temporary_folder_create {
 function temporary_folder_remove {
 
 	cd $SCRIPT_PATH
-	rm -Rf $TEMPORARY_FOLDER
+	sudo rm -Rf $TEMPORARY_FOLDER
 
 }
 
@@ -143,14 +143,12 @@ function verbose {
 # So we emulate a fake extern file with function body inside
 function exesudo {
 
-	mkdir -p /tmp/shm
-
     local _funcname_="$1"
-    local params=( "$@" )               ## array containing all params passed here
-    local tmpfile="/tmp/shm/$RANDOM"    ## temporary file
-    local filecontent                   ## content of the temporary file
-    local regex                         ## regular expression
-    local func                          ## function source
+    local params=( "$@" )               		## array containing all params passed here
+    local tmpfile="$TEMPORARY_FOLDER/exesudofunc$RANDOM"   ## temporary file
+    local filecontent                   		## content of the temporary file
+    local regex                         		## regular expression
+    local func                          		## function source
 
     # Shift the first param (which is the name of the function)
     unset params[0]              ## remove first element
@@ -173,6 +171,8 @@ function exesudo {
     done
 
     content="$content)\n"
+	sudo touch "$tmpfile"
+	sudo chmod 777 "$tmpfile"
     echo -e "$content" > "$tmpfile"
 
     # Append the function source
@@ -184,10 +184,8 @@ function exesudo {
 
     # Execute the temporary file with sudo
     sudo bash "$tmpfile"
-    rm "$tmpfile"
 
 }
-
 
 
 
