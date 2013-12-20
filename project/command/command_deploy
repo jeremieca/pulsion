@@ -101,7 +101,7 @@ function command_deploy {
 
 		# Verify if root is necessary to copy in destination folder
 		if [ ! -w $deploy_folder ]; then
-			verbose 1 "Deploy folder require sudo permissions"
+			verbose 1 "/!\ Deploy folder require sudo permissions"
 			require_root
 		fi
 
