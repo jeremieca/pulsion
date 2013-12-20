@@ -99,6 +99,12 @@ function command_deploy {
 		if is_function_exist list_deploy_files_to_remove; then list_deploy_cmd="list_deploy_files_to_remove"; fi
 		if is_function_exist post_actions_in_config_folder; then post_cmd="post_actions_in_config_folder"; fi
 
+		# Verify if root is necessary to copy in destination folder
+		if [ ! -w $deploy_folder ]; then
+			verbose 1 "Deploy folder require sudo permissions"
+			require_root
+		fi
+
 		# Deploying
 		verbose 1 "- Deploying..."
 
@@ -129,12 +135,6 @@ function command_deploy {
 		 	else
 		 		verbose 1 "    - Create"
 		 		mkdir -p $deploy_folder
-			fi
-
-			# Verify if root is necessary to copy in destination folder
-			if [ ! -w $deploy_folder ]; then
-				verbose 1 "Deploy folder require sudo permissions"
-				require_root
 			fi
 
 			# Copying files
