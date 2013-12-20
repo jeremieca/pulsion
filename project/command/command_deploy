@@ -55,8 +55,6 @@ function command_deploy {
 			return 1
 		fi
 
-		require_root
-
 		verbose 1 "- Read "deploy_$deploy_name" project"
 		deploy_$deploy_name
 
@@ -133,6 +131,11 @@ function command_deploy {
 		 		mkdir -p $deploy_folder
 			fi
 
+			# Verify if root is necessary to copy in destination folder
+			if [ ! -w $deploy_folder ]; then
+				verbose 1 "Deploy folder require sudo permissions"
+				require_root
+			fi
 
 			# Copying files
 			cd $project_folder
