@@ -143,6 +143,7 @@ function verbose {
 # So we emulate a fake extern file with function body inside
 function exesudo {
 
+	local _funcimports_=( "get_platform" )
     local _funcname_="$1"
     local params=( "$@" )               		## array containing all params passed here
     local tmpfile="$TEMPORARY_FOLDER/exesudofunc$RANDOM"   ## temporary file
@@ -175,6 +176,12 @@ function exesudo {
 	sudo chmod 777 "$tmpfile"
     echo -e "$content" > "$tmpfile"
 
+    # Import specific functions in sudo environment
+    for funcimport in "${_funcimports_[@]}"
+    do
+    	echo "#$( type "$funcimport" )" >> "$tmpfile"
+    done
+
     # Append the function source
     echo "#$( type "$_funcname_" )" >> "$tmpfile"
 
@@ -186,7 +193,6 @@ function exesudo {
     sudo bash "$tmpfile"
 
 }
-
 
 
 
