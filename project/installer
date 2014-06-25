@@ -27,7 +27,13 @@ function install {
 
 		install_cmd="exesudo $install_cmd"
 		verbose 3 "  - $1 install in progress..."
-	 	$install_cmd > /dev/null
+	
+		if [ $VERBOSE -gt 3 ]; then
+			$install_cmd
+		else
+			$install_cmd > /dev/null
+		fi
+
 		hash -r
 
 		temporary_folder_remove
