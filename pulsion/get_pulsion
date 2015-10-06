@@ -13,7 +13,7 @@ fi
 # Clone in temporary folder
 sudo mkdir -p $TEMPORARY_FOLDER
 cd $TEMPORARY_FOLDER
-sudo git clone https://jeremieca@bitbucket.org/deescut/pulsion.git
+sudo git clone https://bitbucket.org/deescut/pulsion.git
 cd pulsion
 sudo git checkout $branch
 
