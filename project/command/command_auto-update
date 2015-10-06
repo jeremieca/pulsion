@@ -11,7 +11,7 @@ function command_auto-update {
 
 	function process {
 
-		scripts/get_pulsion
+		pulsion/get_pulsion
 
 	}
 

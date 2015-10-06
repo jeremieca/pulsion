@@ -20,7 +20,7 @@ function is_command_exist {
 function require_root {
 	
 	if ! is_root; then
-		echo "/!\ Usage : sudo scripts/pulsion"
+		echo "/!\ Usage : sudo pulsion/pulsion"
 		exit 1
 	fi
 
