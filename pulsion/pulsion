@@ -430,7 +430,7 @@ function command_auto-update {
 
 	function process {
 
-		pulsion/get_pulsion
+		pulsion/get_pulsion && exit
 
 	}
 
