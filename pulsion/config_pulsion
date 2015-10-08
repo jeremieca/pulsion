@@ -53,7 +53,9 @@ function command_test {
 			echo -e "\n- Initialize (/tmp mode)"
 			require_root
 		fi
-echo "$TEMP_FOLDER_PULSION_TEST"
+
+		mkdir -p TEMP_FOLDER_PULSION_TEST
+
 		# Choose the console to test
 		console=$console_project_path
 		mode="Development mode"
