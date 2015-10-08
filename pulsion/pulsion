@@ -430,7 +430,9 @@ function command_auto-update {
 
 	function process {
 
-		pulsion/get_pulsion && exit
+		# Call like that fix : http://stackoverflow.com/questions/4754592/could-replacing-a-bash-script-with-a-new-version-cause-a-running-instance-of-the
+		"pulsion/get_pulsion" > pulsion/pulsion.update
+		cat pulsion/pulsion.update | bash
 
 	}
 
