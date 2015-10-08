@@ -2,5 +2,6 @@
 
 CONSOLE_PATH=$2
 CONFIG_CONSOLE_FILE=$3
+TEMP_FOLDER_PULSION_TEST=$4
 CONSOLE="$CONSOLE_PATH -c $CONFIG_CONSOLE_FILE"
   # Potentiellement suivi par _specific_config

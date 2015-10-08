@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. tests/include/environment_variable
+
 function command_list_available {
 
 	function process {
@@ -46,7 +48,7 @@ function command_install {
 		install notfoundinstallercommand
 		install new_command
 
-		if [ -z $TEMP_FOLDER_PULSION_TEST ]; then
+		if [ -z "$TEMP_FOLDER_PULSION_TEST" ]; then
 			# Only if sudo mode
 			install success45676542467535667567567
 			rm /usr/local/bin/success45676542467535667567567

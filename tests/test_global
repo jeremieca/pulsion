@@ -48,7 +48,7 @@ test_installer() {
 	assertTrue "Echo is already installed" \
 	           "[ `echo $installation | grep -c "echo is already installed"` -eq 1 ]"
 	
-	if [ -z $TEMP_FOLDER_PULSION_TEST ]; then
+	if [ -z "$TEMP_FOLDER_PULSION_TEST" ]; then
 		# Testable only if sudo is used
 		assertTrue "Install must be success" \
 	               "[ `echo $installation | grep -c "success45676542467535667567567 is installed"` -eq 1 ]"

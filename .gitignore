@@ -1,9 +1,1 @@
-# Pulsion configuration
-pulsion/*
-!pulsion/config
-pulsion/config/*
-!pulsion/config/*_default
-!pulsion/config/*_default
-!pulsion/config_pulsion
-!pulsion/get_pulsion
-!pulsion/extern
+project/ignored_file.php
