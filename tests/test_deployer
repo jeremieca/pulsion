@@ -76,7 +76,7 @@ function initialize_local_folder {
 	# Create folder
 	mkdir -p $temporary_local_folder
 	cd $temporary_local_folder
-
+pwd
 	# Launch git and gitignore file
 	git init > /dev/null
 	echo "project/ignored_file.php" > .gitignore
