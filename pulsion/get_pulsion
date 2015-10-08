@@ -1,8 +1,13 @@
 #!/bin/bash
 
+if ! [ -f "pulsion/get_pulsion" ]; then
+	echo "You must run the script get_pulsion from project root."
+	exit 1
+fi
+
 # Environment variables
 INSTALL_PATH="$(pwd)/pulsion"
-TEMPORARY_FOLDER="/tmp/PulsionInstall/$RANDOM"
+TEMPORARY_FOLDER="pulsion/tmp/get_pulsion_compile/$RANDOM"
 
 # Select branch to import
 branch="master"
@@ -11,17 +16,17 @@ if [ $# -eq 1 ]; then
 fi
 
 # Clone in temporary folder
-sudo mkdir -p $TEMPORARY_FOLDER
+mkdir -p $TEMPORARY_FOLDER
 cd $TEMPORARY_FOLDER
-sudo git clone https://bitbucket.org/deescut/pulsion.git
+git clone https://bitbucket.org/deescut/pulsion.git
 cd pulsion
-sudo git checkout $branch
+git checkout $branch
 
 # Fusion and copy
-sudo ./project/pulsion fusion -t
+./project/pulsion fusion -t --local
 if [ -f output/pulsion ]; then
-	sudo cp output/pulsion $INSTALL_PATH
-	sudo chmod +x $INSTALL_PATH/pulsion
+	cp output/pulsion $INSTALL_PATH
+	chmod +x $INSTALL_PATH/pulsion
 	if [[ $branch == "master" ]]; then
 		echo "You have now the latest stable version of Pulsion"
 	else
