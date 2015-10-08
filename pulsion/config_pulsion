@@ -54,8 +54,6 @@ function command_test {
 			require_root
 		fi
 
-		mkdir -p TEMP_FOLDER_PULSION_TEST
-
 		# Choose the console to test
 		console=$console_project_path
 		mode="Development mode"
@@ -74,8 +72,8 @@ function command_test {
 		for test_file in tests/test_*
 		do
 			echo "- Test the file $test_file"
-			echo ./pulsion/extern/shunit2 "$test_file" "$console" "$config_test_path" "$TEMP_FOLDER_PULSION_TEST"
-			./pulsion/extern/shunit2 "$test_file" "$console" "$config_test_path" "$TEMP_FOLDER_PULSION_TEST"\
+			echo ./pulsion/extern/shunit2 "$test_file" "$console" "$TEMP_FOLDER_PULSION_TEST" "$config_test_path"
+			./pulsion/extern/shunit2 "$test_file" "$console" "$TEMP_FOLDER_PULSION_TEST" "$config_test_path"\
 			| sed -e 's/^/  -/' | sed -e 's/-ASSERT/  -ASSERT/g'
 			echo;
 		done
