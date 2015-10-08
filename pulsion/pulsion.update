@@ -1,0 +1,42 @@
+Your branch is up-to-date with 'origin/master'.
+
+- Initialize fusion tool
+
+- Read #include instructions
+
+- Fusion in progress
+  - fusioned project/environment_variable
+  - fusioned project/launcher
+  - fusioned project/facilitator_scripts
+  - fusioned project/installer
+  - fusioned project/command/command_default
+  - fusioned project/command/command_auto-update
+  - fusioned project/command/command_deploy
+
+- Fusion succeed
+  - script available under output/pulsion
+  - launch the tests
+
+--------------------------------------------------------
+
+- Load the tests with : Fusion mode 
+
+- Test the file tests/test_deployer
+  -test_deploy_process
+  -
+  -Ran 1 test in 14 assertions.
+  -
+  -OK
+
+- Test the file tests/test_global
+  -test_load_config_file
+  -test_read_list_available
+  -test_installer
+  -test_parameter_reader
+  -
+  -Ran 4 tests in 13 assertions.
+  -
+  -OK
+
+
+You have now the latest stable version of Pulsion
