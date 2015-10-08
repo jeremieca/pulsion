@@ -45,8 +45,13 @@ function command_test {
 
 	function process {
 		
-		
+		if hasParam --local "$@"; then
+			echo -e "\n- Initialize (local mode)"
+			export TEMP_FOLDER_PULSION_TEST="pulsion/tmp/tests"
+		else
+			echo -e "\n- Initialize (/tmp mode)"
 			require_root
+		fi
 
 		# Choose the console to test
 		console=$console_project_path
@@ -66,7 +71,6 @@ function command_test {
 		for test_file in tests/test_*
 		do
 			echo "- Test the file $test_file"
-			echo "$test_file" "$console" "$config_test_path"
 			./pulsion/extern/shunit2 "$test_file" "$console" "$config_test_path"\
 			| sed -e 's/^/  -/' | sed -e 's/-ASSERT/  -ASSERT/g'
 			echo;
@@ -91,7 +95,8 @@ function command_fusion {
 
 		if hasParam --local "$@"; then
 			echo -e "\n- Initialize fusion tool (local mode)"
-			temporary_fusion_folder="pulsion/tmp/fusion"
+			TEMPORARY_FOLDER="pulsion/tmp"
+			temporary_fusion_folder="$TEMPORARY_FOLDER/fusion"
 		else
 			echo -e "\n- Initialize fusion tool (/tmp mode)"
 			require_root
@@ -190,9 +195,8 @@ function command_fusion {
 
 		echo;
 
-		# Remove temproray folder
+		# Remove temporary folder
 		rm -Rf $TEMPORARY_FOLDER
-
 	}
 
 }

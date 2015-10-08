@@ -1,6 +1,11 @@
 #!/bin/bash
 
-temporary_folder_tests="/tmp/pulsion/tests"
+if [ -z TEMP_FOLDER_PULSION_TEST ]; then
+	temporary_folder_tests="/tmp/pulsion/tests"
+else
+	temporary_folder_tests=$TEMP_FOLDER_PULSION_TEST
+fi
+
 temporary_local_folder="$temporary_folder_tests/$RANDOM/local"
 temporary_config_folder="$temporary_local_folder/config"
 temporary_deploy_folder="$temporary_folder_tests/$RANDOM/distant"
