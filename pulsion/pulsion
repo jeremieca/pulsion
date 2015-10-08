@@ -443,7 +443,7 @@ function command_deploy {
 
 	# Define project_folder, config_folder and deploy_folder
 	project_folder="$SCRIPT_PATH/project"
-	config_folder="$SCRIPT_PATH/config"
+	config_folder="$SCRIPT_PATH/pulsion/config"
 	deploy_folder="" # No default value
 
 	function help {
