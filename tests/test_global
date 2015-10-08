@@ -43,17 +43,16 @@ test_installer() {
 	installation=$($config install -v 5)
 
 	# Test all case of install { already, failed, success, not implemented }
-	assertTrue "Install must be failed because command still doesn't exist after install" \
-	           "[ `echo $installation | grep -c "new_command install failed"` -eq 1 ]"
-	assertTrue "Echo is already installed" \
-	           "[ `echo $installation | grep -c "echo is already installed"` -eq 1 ]"
-	
 	if [ -z "$TEMP_FOLDER_PULSION_TEST" ]; then
+		assertTrue "Install must be failed because command still doesn't exist after install" \
+		           "[ `echo $installation | grep -c "new_command install failed"` -eq 1 ]"
 		# Testable only if sudo is used
 		assertTrue "Install must be success" \
 	               "[ `echo $installation | grep -c "success45676542467535667567567 is installed"` -eq 1 ]"
 	fi
 
+	assertTrue "Echo is already installed" \
+	           "[ `echo $installation | grep -c "echo is already installed"` -eq 1 ]"
 	assertTrue "Install must be not implemented" \
 			   "[ `echo $installation | grep -c "install_notfoundinstallercommand function implementation does not exist"` -eq 1 ]"
 

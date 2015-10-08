@@ -9,7 +9,7 @@ function install {
 	fi
 
 	install_cmd="install_$1"
-
+echo "$1"
 	if is_command_exist $1; then
 		verbose 3 "  - $1 is already installed"
 		return 0
