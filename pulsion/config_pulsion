@@ -37,14 +37,13 @@ function command_test {
 	function help {
 
 		echo "Launch the tests on project folder by default"
-		echo "  -f  Launch the tests on merged file success"
-		echo "  -ff Launch the tests on merged file failed"
+		echo "  -f      Launch the tests on merged file success"
+		echo "  -ff     Launch the tests on merged file failed"
+		echo "  --local Use local tmp folder to test"
 
 	}
 
 	function process {
-		
-		require_root
 
 		# Choose the console to test
 		console=$console_project_path
@@ -80,14 +79,19 @@ function command_fusion {
 		echo "Fusion all the project folder's scripts in one file and execute the tests if necessary"
 		echo "  -t         Launch the test on the merged file if success"
 		echo "  -t --force Force to launch the tests on file merged failed if failed"
+		echo "  --local    Use local tmp folder to compile and test"
 
 	}
 
 	function process {
 
-		require_root
-
-		echo -e "\n- Initialize fusion tool"
+		if hasParam --local "$@"; then
+			echo -e "\n- Initialize fusion tool (local mode)"
+			temporary_fusion_folder="pulsion/tmp/fusion"
+		else
+			echo -e "\n- Initialize fusion tool (/tmp mode)"
+			require_root
+		fi
 
 		mkdir -p $temporary_fusion_folder
 		tmp_fusioned_file="$temporary_fusion_folder/$RANDOM"
@@ -147,7 +151,11 @@ function command_fusion {
 				if hasParam --force "$@"; then
 					tests_option="-ff"
 				fi
+				if hasParam --local "$@"; then
+					tests_option="$tests_option --local"
+				fi
 			fi
+
 		else
 			fusion_state="succeed"
 			fusion_output=$fusioned_file_path
@@ -155,6 +163,9 @@ function command_fusion {
 			# Program automatic launch of the test on fail minimized file
 			if hasParam -t "$@"; then
 				tests_option="-f"
+				if hasParam --local "$@"; then
+					tests_option="$tests_option --local"
+				fi
 			fi
 		fi
 
