@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "-----"
 echo $3
 CONSOLE_PATH=$2
 TEMP_FOLDER_PULSION_TEST=$3
