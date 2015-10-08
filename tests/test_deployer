@@ -74,6 +74,7 @@ test_deploy_process() {
 function initialize_local_folder {
 
 	# Create folder
+	echo "init local"
 	mkdir -p $temporary_local_folder
 	cd $temporary_local_folder
 pwd
