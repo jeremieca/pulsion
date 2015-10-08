@@ -43,10 +43,10 @@ function command_install {
 	function process {
 
 		install echo
-		install new_command
 		install notfoundinstallercommand
+		install new_command
 
-		if [ -z TEMP_FOLDER_PULSION_TEST ]; then
+		if [ -z $TEMP_FOLDER_PULSION_TEST ]; then
 			# Only if sudo mode
 			install success45676542467535667567567
 			rm /usr/local/bin/success45676542467535667567567

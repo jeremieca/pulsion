@@ -45,6 +45,8 @@ function command_test {
 
 	function process {
 		
+		unset TEMP_FOLDER_PULSION_TEST
+		
 		if hasParam --local "$@"; then
 			echo -e "\n- Initialize (local mode)"
 			export TEMP_FOLDER_PULSION_TEST="pulsion/tmp/tests"
@@ -75,6 +77,8 @@ function command_test {
 			| sed -e 's/^/  -/' | sed -e 's/-ASSERT/  -ASSERT/g'
 			echo;
 		done
+
+		unset TEMP_FOLDER_PULSION_TEST
 
 	}
 
