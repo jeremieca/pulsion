@@ -7,6 +7,8 @@ The high productivity library to develop development tools in bash. The reposito
   - Tests folder  
   - Output folder  
 
+[ ![Codeship Status for deescut/Pulsion](https://codeship.com/projects/4a7bfc80-5021-0133-13af-6686e2a963df/status?branch=master)](https://codeship.com/projects/107567)
+
 ## Complete the project installation
 
 You must get the last fusionned version of Pulsion script :  
