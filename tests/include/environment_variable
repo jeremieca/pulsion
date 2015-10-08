@@ -1,8 +1,13 @@
 #!/bin/bash
-echo "-----"
-echo $3
+
 CONSOLE_PATH=$2
 TEMP_FOLDER_PULSION_TEST=$3
 CONFIG_CONSOLE_FILE=$4
 CONSOLE="$CONSOLE_PATH -c $CONFIG_CONSOLE_FILE"
+
+LOCAL_PARAMETER=""
+if ! [ -z "$TEMP_FOLDER_PULSION_TEST" ]; then
+	LOCAL_PARAMETER=" --local"
+fi
+
 # Potentiellement suivi par _specific_config

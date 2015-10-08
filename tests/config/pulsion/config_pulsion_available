@@ -47,7 +47,7 @@ function command_install {
 		install echo
 		install notfoundinstallercommand
 
-		if [ -z "$TEMP_FOLDER_PULSION_TEST" ]; then
+		if ! hasParam --local "$@"; then
 			# Only if sudo mode
 			install new_command
 			install success45676542467535667567567

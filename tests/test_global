@@ -40,7 +40,7 @@ test_read_list_available() {
 test_installer() {
 
 	config="$(echo $CONSOLE)_available"
-	installation=$($config install -v 5)
+	installation=$($config install -v 5 $LOCAL_PARAMETER)
 
 	# Test all case of install { already, failed, success, not implemented }
 	if [ -z "$TEMP_FOLDER_PULSION_TEST" ]; then

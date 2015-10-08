@@ -71,8 +71,7 @@ function command_test {
 		# Test the development version
 		for test_file in tests/test_*
 		do
-			echo "- Test the file $test_file" ## ???????? !!!!!
-			echo ./pulsion/extern/shunit2 "$test_file" "$console" "$TEMP_FOLDER_PULSION_TEST" "$config_test_path"
+			echo "- Test the file $test_file"
 			./pulsion/extern/shunit2 "$test_file" "$console" "$TEMP_FOLDER_PULSION_TEST" "$config_test_path" \
 			| sed -e 's/^/  -/' | sed -e 's/-ASSERT/  -ASSERT/g'
 			echo;

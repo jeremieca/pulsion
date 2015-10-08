@@ -1,20 +1,18 @@
 #!/bin/bash
 
+. tests/include/environment_variable
+
+if [ -z "$TEMP_FOLDER_PULSION_TEST" ]; then
+	temporary_folder_tests="/tmp/pulsion/tests"
+else
+	temporary_folder_tests=$TEMP_FOLDER_PULSION_TEST
+fi
+
 temporary_local_folder="$temporary_folder_tests/$RANDOM/local"
 temporary_config_folder="$temporary_local_folder/config"
 temporary_deploy_folder="$temporary_folder_tests/$RANDOM/distant"
 tests_config_folder="tests/tmp"
 deploy_config_path="tests/config/other/deploy_config"
-
-. tests/include/environment_variable
-
-if [ -z "$TEMP_FOLDER_PULSION_TEST" ]; then
-	temporary_folder_tests="/tmp/pulsion/tests"
-	echo "11111111"
-else
-	temporary_folder_tests=$TEMP_FOLDER_PULSION_TEST
-	echo "22222222"
-fi
 
 # Test the deployer
 test_deploy_process() {
@@ -74,10 +72,9 @@ test_deploy_process() {
 function initialize_local_folder {
 
 	# Create folder
-	echo "init local"
 	mkdir -p $temporary_local_folder
 	cd $temporary_local_folder
-	echo $(pwd)
+
 	# Launch git and gitignore file
 	git init > /dev/null
 	echo "project/ignored_file.php" > .gitignore
