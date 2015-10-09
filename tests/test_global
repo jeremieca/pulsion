@@ -52,7 +52,7 @@ test_installer() {
 	fi
 
 	assertTrue "Echo is already installed" \
-	           "[ `echo $installation | grep -c "echo is already installed"` -eq 1 ]"
+	           "[ `echo $installation | grep -c "echo is alread installed"` -eq 1 ]"
 	assertTrue "Install must be not implemented" \
 			   "[ `echo $installation | grep -c "install_notfoundinstallercommand function implementation does not exist"` -eq 1 ]"
 
