@@ -42,15 +42,15 @@ A Pulsion project is generally structured as follows :
 ### Write .gitignore for a Pulsion project
 
     :::shell
-        # Ignore Pulsion script 
-        scripts/pulsion  
-          
-        # Mac OSx  
-        .DS_Store  
-          
-        # Configuration files  
-        config/*  
-        !config/*_default  
+        # Pulsion configuration
+        pulsion/*
+        !pulsion/config
+        pulsion/config/*
+        !pulsion/config/*_default
+        !pulsion/config/*_default
+        !pulsion/config_pulsion
+        !pulsion/get_pulsion
+        !pulsion/extern
 
 Usually, a getPulsion script is create in scripts folder. It download the lastest version of Pulsion. You have one Pulsion version in each project you develop.  
 
