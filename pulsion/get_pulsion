@@ -19,7 +19,7 @@ fi
 # Clone in temporary folder
 mkdir -p $TEMPORARY_FOLDER
 cd $TEMPORARY_FOLDER
-git clone https://bitbucket.org/deescut/pulsion.git
+git clone https://github.com/jeremieca/pulsion.git
 cd pulsion
 git checkout $branch
 
@@ -35,7 +35,7 @@ if [ -f output/pulsion ]; then
 	else
 		echo "You have now the latest version of Pulsion in $branch"
 	fi
-	
+
 else
 	echo "Get Pulsion failed"
 fi
