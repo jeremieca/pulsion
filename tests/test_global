@@ -16,9 +16,8 @@ test_read_list_available() {
 
 	config="$(echo $CONSOLE)_available"
 	list="$config list_available"
-	
+
 	commands=$($list command)
-	installers=$($list install)
 	help_long=$($config c1 --help)
 	help_short=$($config c1 -h)
 	process_launch=$($config c2 process)
@@ -26,35 +25,11 @@ test_read_list_available() {
 	# Test the detection of installer and command function
 	assertTrue "c1 command must be found" "[ `echo $commands | grep -c c1` -eq 1 ]"
 	assertTrue "c2 command must be found" "[ `echo $commands | grep -c c2` -eq 1 ]"
-	assertTrue "i1 installer must be found" "[ `echo $installers | grep -c echo` -eq 1 ]"
-	assertTrue "i1 installer must be found" "[ `echo $installers | grep -c new_command` -eq 1 ]"
 
 	# Test calling help and process
 	assertEquals "Two different ways to display help must be equals display" "$help_long" "$help_short"
 	assertTrue "Help c1 must be display the help" "[ `echo $help_short | grep -c ok_help_1` -eq 1 ]"
 	assertTrue "Process c2 must be execute" "[ `echo $process_launch | grep -c ok_process_2` -eq 1 ]"
-
-}
-
-# Test the installer module
-test_installer() {
-
-	config="$(echo $CONSOLE)_available"
-	installation=$($config install -v 5 $LOCAL_PARAMETER)
-
-	# Test all case of install { already, failed, success, not implemented }
-	if [ -z "$TEMP_FOLDER_PULSION_TEST" ]; then
-		assertTrue "Install must be failed because command still doesn't exist after install" \
-		           "[ `echo $installation | grep -c "new_command install failed"` -eq 1 ]"
-		# Testable only if sudo is used
-		assertTrue "Install must be success" \
-	               "[ `echo $installation | grep -c "success45676542467535667567567 is installed"` -eq 1 ]"
-	fi
-
-	assertTrue "Echo is already installed" \
-	           "[ `echo $installation | grep -c "echo is already installed"` -eq 1 ]"
-	assertTrue "Install must be not implemented" \
-			   "[ `echo $installation | grep -c "install_notfoundinstallercommand function implementation does not exist"` -eq 1 ]"
 
 }
 

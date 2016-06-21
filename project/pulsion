@@ -10,11 +10,9 @@
 . project/environment_variable #include
 . project/launcher #include
 . project/facilitator_scripts #include
-. project/installer #include
 
 . project/command/command_default #include
 . project/command/command_auto-update #include
-. project/command/command_deploy #include
 
 # Launch the console
 launch_framework "$@"

@@ -3,7 +3,7 @@
 function command_default {
 
 	function help {
-	
+
 		echo "
 
 ************************************************
@@ -15,14 +15,11 @@ function command_default {
 Modules available ( Config : $CONFIG_FILE )
 $(list_available command)
 
-Installers available ( Config : $CONFIG_FILE )
-$(list_available install)
-
 Parameters
     -c [path] Config file path
     -v [level] Mode verbose (1..5)
     -h, --help Help for a specific command
-		
+
 		"
 
 	}
