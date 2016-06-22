@@ -30,7 +30,7 @@ if [ -f output/pulsion ]; then
 	chmod +x $INSTALL_PATH/pulsion
 	cd "$INSTALL_PATH/.."
 	rm -Rf $TEMPORARY_FOLDER_ROOT
-	if [[ $branch == "master" ]]; then
+	if [[ $branch == "open-source" ]]; then
 		echo "You have now the latest stable version of Pulsion"
 	else
 		echo "You have now the latest version of Pulsion in $branch"
