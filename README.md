@@ -1,66 +1,63 @@
 # Pulsion project
 
-The high productivity library to develop development tools in bash. The repository contains :  
-
-  - Pulsion project development folder  
-  - Scripts folder for development tools  
-  - Tests folder  
-  - Output folder  
-  
 [ ![Codeship Status for deescut/Pulsion](https://codeship.com/projects/45add3d0-507b-0133-46c0-5abe51be460d/status?branch=master)](https://codeship.com/projects/107676)
 
-## Complete the project installation
+## Install
 
-You must get the last fusionned version of Pulsion script :  
+You must download /bin/pulsion of this repository and put it in /usr/local/bin with execute right.
+Then, you can go to your project folder and execute :
 
-    :::shell 
-        sudo scripts/get_pulsion [[ branch name | "master" as default ]]  
+  ```shell
+  pulsion init
+  ```
 
-Then, you can access to the pulsion application with the following command :  
+## Usage
 
-    :::shell 
-        sudo scripts/pulsion  
+After install, you can run at the root of project :
 
-## Struture branches
-
-  - Master : Always stable  
-  - Feature/* : Development of a specific feature  
+  ```shell
+  pulsion
+  ```
   
-# Develop with Pulsion
+This command list all commands availables in you Pulsion project.
 
-Pulsion facilitates the development of scripts routine in your projects. Simply implement the deployment of test routines, scripts installation. Pulsion offers a fully customizable architecture for your projects.  
+## Create your own commands
 
-## Structure projects
+You can create your own commands in pulsion/config_pulsion file and run it with pulsion command.
 
-A Pulsion project is generally structured as follows :  
+A command looks like that :
 
-  - Scripts folder : Contains Pulsion script and the configuration file of Pulsion "config_pulsion"  
-  - Project folder : Contains the sources of the project  
-  - Tests : Contains the tests of the project  
-  - Config : Contains the specific configuration to a user  
+```shell
+function command_hello {
 
-### Write .gitignore for a Pulsion project
+	function help {
 
-    :::shell
-        # Pulsion configuration
-        pulsion/*
-        !pulsion/config
-        pulsion/config/*
-        !pulsion/config/*_default
-        !pulsion/config/*_default
-        !pulsion/config_pulsion
-        !pulsion/get_pulsion
-        !pulsion/extern
+		echo -e "Example of pulsion command"
 
-Usually, a getPulsion script is create in scripts folder. It download the lastest version of Pulsion. You have one Pulsion version in each project you develop.  
+	}
 
-## Implement config_pulsion script
+	function process {
 
-The scripts/config_pulsion file contains all your routines project.
-You can add a routine developing a new command.  
+		if hasParam --name "$@"; then
+			myname="$(getParamValue --name "$@")"
+			verbose 1 "Hello $myname !"
+		else
+			verbose 1 "Hello world !"
+		fi
 
-## Deployment configuration
+	}
 
-You can easily develop routines deployment using the "deploy" command.  
-  
+}
+```
+
+
+## Available helpers
+
+TODO : List and document high level bash functions available in Pulsion by default
+
+  - hasParam
+  - verbose
+  - getParamValue
+  - ...
+
 Have fun !  
