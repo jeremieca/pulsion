@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Pulsion script is an easy way to initialize or use pulsion projet
+# Pulsion can always be run or initialized without this script
+
+function init {
+
+	if [ -d pulsion ]; then
+		echo "This project already have a pulsion folder"
+		exit 1
+	fi
+
+	if [ -f pulsion ]; then
+		echo "A file with name \"pulsion\" already exists"
+		exit 1
+	fi
+
+	mkdir -p pulsion/tmp
+
+	cd pulsion/tmp
+	git clone https://github.com/jeremieca/pulsion-skeleton.git
+
+	cd ..
+	cp -r tmp/pulsion-skeleton/ .
+	rm -Rf .git
+	rm -Rf ./tmp
+
+	chmod +x get_pulsion
+
+	cd ..
+	./pulsion/get_pulsion
+
+	echo "Project now use Pulsion"
+
+}
+
+function run {
+
+	if ! [ -f pulsion/pulsion ]; then
+		echo "/!\ This project is not a Pulsion project /!\ "
+		echo "You can run \"pulsion init\" to initialize a Pulsion project"
+		exit 0
+	fi
+
+	./pulsion/pulsion "$@"
+
+}
+
+if [ "$1" = "init" ]; then
+	init
+else
+	run "$@"
+fi
