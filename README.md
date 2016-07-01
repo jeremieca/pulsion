@@ -10,21 +10,22 @@ You can easily create aliases for all your terminal commands and create your own
 Just use our high level bash tool to manage your commands.
 
 When your project is configured, you can from a unique place :
-	- Start your database
-	- Install dependencies
-	- Compile your code
-	- Deploy your project
-	- ...
-	- And all other things you want to do
+
+  - Start your database
+  - Install dependencies
+  - Compile your code
+  - Deploy your project
+  - ...
+  - And all other things you want to do
 
 Pulsion is initially a tool for developper or sysadmin in a development environment.
 
 ### Why to use it ?
 
-	- Pulsion have no external dependencies, we just need bash (available by default on linux, osx (and windows soon))
-	- Pulsion can be use without any install (but we provide a small optionnal script to help you create a new pulsion project and use it daily)
-	- You write your scripts in bash. Bash is one of the most universal language. Moreover, Pulsion provides some functions in top of bash to write your scripts faster (seen Available helpers)
-	- Coming soon : You can build a project hierarchy. Pulsion project can import another Pulsion project. So, you can have a unique place where all commands on a very very large project are centralized (ex: backend, frontend, database, deployment...)
+  - Pulsion have no external dependencies, we just need bash (available by default on linux, osx (and windows soon))
+  - Pulsion can be use without any install (but we provide a small optionnal script to help you create a new pulsion project and use it daily)
+  - You write your scripts in bash. Bash is one of the most universal language. Moreover, Pulsion provides some functions in top of bash to write your scripts faster (seen Available helpers)
+  - Coming soon : You can build a project hierarchy. Pulsion project can import another Pulsion project. So, you can have a unique place where all commands on a very very large project are centralized (ex: backend, frontend, database, deployment...)
 
 ### Status of project
 
