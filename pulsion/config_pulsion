@@ -44,7 +44,7 @@ function command_test {
 	}
 
 	function process {
-		
+
 		TEMP_FOLDER_PULSION_TEST=""
 		if hasParam --local "$@"; then
 			echo -e "\n- Initialize (local mode)"
@@ -146,7 +146,7 @@ function command_fusion {
 
 				echo "  - not found $file"
 				success=0
-				
+
 			fi
 
 		done
@@ -201,4 +201,3 @@ function command_fusion {
 	}
 
 }
-

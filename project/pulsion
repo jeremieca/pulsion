@@ -7,9 +7,10 @@
 # Default config pulsion file parameter is set to scripts/config_pulsion
 #
 
-. project/environment_variable #include
+. project/environment_variables #include
+. project/interpreter #include
+. project/helpers #include
 . project/launcher #include
-. project/facilitator_scripts #include
 
 . project/command/command_default #include
 . project/command/command_auto-update #include

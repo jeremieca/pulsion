@@ -19,7 +19,7 @@ function deploy_tmpProject {
 		get_config_folder
 		get_deploy_folder
 
-		if ! hasParam --param_sup "$@"; then
+		if ! has_param --param_sup "$@"; then
 			echo "! Fail pre actions parameters"
 		fi
 
@@ -29,7 +29,7 @@ function deploy_tmpProject {
 
 		git ls-files && git ls-files --other --exclude-standard
 
-		if ! hasParam --param_sup "$@"; then
+		if ! has_param --param_sup "$@"; then
 			echo "! Fail list local parameters"
 		fi
 
@@ -39,7 +39,7 @@ function deploy_tmpProject {
 
 		echo "file_to_remove"
 
-		if ! hasParam --param_sup "$@"; then
+		if ! has_param --param_sup "$@"; then
 			echo "! Fail list deploy parameters"
 		fi
 
@@ -49,7 +49,7 @@ function deploy_tmpProject {
 
 		touch post.actions
 
-		if ! hasParam --param_sup "$@"; then
+		if ! has_param --param_sup "$@"; then
 			echo "! Fail post actions parameters"
 		fi
 

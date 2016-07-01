@@ -29,13 +29,13 @@ function command_parameters {
 		#the test parameters : --force lol -t ok -o
 
 		# Must display "ok"
-		if hasParam -t "$@"; then
-			getParamValue -t "$@"
+		if has_param -t "$@"; then
+			get_param_value -t "$@"
 		fi
 
 		# Must display nothing
-		if hasParam -o "$@"; then
-			getParamValue -o "$@"
+		if has_param -o "$@"; then
+			get_param_value -o "$@"
 		fi
 
 	}

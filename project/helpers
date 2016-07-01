@@ -1,0 +1,116 @@
+#!/bin/bash
+
+# Return 0 (true) if the command in param $1 exist
+# Usage : if is_command_exist $1; then
+function is_command_exist {
+
+	if [ $# -ne 1 ]; then
+		return 1
+	fi
+
+	if which $1 > /dev/null; then
+		return 0
+	fi
+
+	return 1
+
+}
+
+# Exit if user is not root
+function require_root {
+
+	if ! is_root; then
+		echo "/!\ Usage : sudo pulsion/pulsion"
+		exit 1
+	fi
+
+}
+
+# Return 0 (true) if the function in param $1 exist
+# Usage : if is_function_exist $1; then
+function is_function_exist {
+
+	if [ $# -ne 1 ]; then
+		return 1
+	fi
+
+	if type -t $1 | grep -q "^function$" ; then
+		return 0
+	fi
+
+	return 1
+
+}
+
+# Return 0 (true) if the root mode is activated
+function is_root {
+
+	if [ "$(id -u)" != "0" ]; then
+		return 1
+	fi
+	return 0
+
+}
+
+# Display the platform
+# Usage : if [[ $(get_platform) != "osx" ]];
+function get_platform {
+
+	unamestr=`uname`
+	if [[ "$unamestr" == 'Linux' ]]; then
+	   echo "linux"
+	elif [[ "$unamestr" == 'Darwin' ]]; then
+	   echo "osx"
+	fi
+
+}
+
+# Return true if the list of arguments contains $1
+function has_param {
+
+	search=$1
+	shift
+	for param in "$@"
+	do
+		if [[ "$param" == "$search" ]]; then
+			return 0
+		fi
+	done
+
+	return 1
+
+}
+
+# Return the value associate to one param
+# myName="$(get_param_value --name "$@")"
+function get_param_value {
+
+	search=$1
+	next=0
+
+	shift
+	for param in "$@"
+	do
+		if [[ "$param" == "$search" ]]; then
+			next=1
+		elif [ $next -eq 1 ]; then
+			echo "$param"
+			return 0
+		fi
+	done
+
+	return 1
+
+}
+
+# Display or not the param $1 depending on the verbose level
+function verbose {
+
+	if [ $# -eq 2 ]; then
+
+		if [ $1 -le $VERBOSE ]; then
+			echo "$2"
+		fi
+
+	fi
+}

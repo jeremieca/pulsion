@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Environment variables
+TEMPORARY_FOLDER="/tmp/Pulsion/$RANDOM"
+SCRIPT_PATH="`pwd`"
+LOCAL_SCRIPT_PULSION_PATH="$(dirname "${BASH_SOURCE[0]}")/pulsion"
+CONFIG_FILE="pulsion/config_pulsion"
+COMMAND="default"
+ACTION="process" # { process, help }
+VERBOSE=1 # { 1=high importance only, 5=all importance }
+DEPLOYMENT_CONFURATION_FILE_PATH="pulsion/config/deploy_config"

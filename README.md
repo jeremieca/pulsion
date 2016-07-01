@@ -4,7 +4,7 @@
 
 ## Description
 
-Pulsion centralize all commands of your project in one unique place with no pain.
+**Pulsion centralize all commands of your project in one unique place with no pain.**
 
 You can easily create aliases for all your terminal commands and create your own command line tool in few minutes.
 Just use our high level bash tool to manage your commands.
@@ -33,7 +33,7 @@ We use Pulsion massively on OSX without any problems for 2 years. However, Pulsi
 
 ## Install
 
-!! This step is optionnal but recommanded if you want to discover Pulsion easily or use it dayli !!
+!! This step is optionnal but recommanded if you want to discover Pulsion easily or use it daily !!
 
 You must download /bin/pulsion of this repository and put it in /usr/local/bin with execute right.
 Then, you can go to your project folder and execute :
@@ -73,8 +73,8 @@ function command_hello {
 
 	function process {
 
-		if hasParam --name "$@"; then
-			myname="$(getParamValue --name "$@")"
+		if has_param --name "$@"; then
+			myname="$(get_param_value --name "$@")"
 			verbose 1 "Hello $myname !"
 		else
 			verbose 1 "Hello world !"
@@ -106,12 +106,63 @@ Here you can write your bash script. Using helpers you can develop you bash scri
 
 Pulsion help you to develop your bash script faster. It provides a list of functions to make generic actions in your command process. This functions, available by default in Pulsion, are called helpers.
 
-TODO : List and document all helpers
+  - verbose : Echo or not depending on the verbose level (1=high importance only, 5=all importance)
 
-  - hasParam
-  - verbose
-  - getParamValue
-  - ...
+```shell
+verbose 3 "Echo only if level of verbose is <= 3"
+```
+
+```shell
+pulsion hello -v 3 # Verbose level
+```
+
+  - has_param : Return true (0) if the param is present
+
+```shell
+if has_param --name "$@"; then
+	...
+```
+
+  - get_param_value : Return the value of a parameter
+
+```shell
+myname="$(get_param_value --name "$@")"
+```
+
+  - is_command_exist : Return true (0) if the shell command exists
+
+```shell
+if is_command_exist echo; then
+	echo "Echo is a valid shell command"
+fi
+```
+
+  - is_function_exist : Return true (0) if the function exists
+
+```shell
+if is_function_exist echo; then
+	...
+```
+
+  - is_root : Return true (0) if the user have root access
+
+```shell
+if is_root; then
+	...
+```
+
+  - require_root : Exit if the user don't have root access
+
+```shell
+require_root
+```
+
+  - get_platform : Return current platform #{osx, linux} (windows not detected for the moment)
+
+```shell
+if [[ $(get_platform) != "osx" ]]; then
+	...
+```
 
 #### Contributions to helpers
 

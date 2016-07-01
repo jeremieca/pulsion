@@ -1,17 +1,16 @@
 #!/bin/bash
 
-# Environment variables
-TEMPORARY_FOLDER="/tmp/Pulsion/$RANDOM"
-SCRIPT_PATH="`pwd`"
-LOCAL_SCRIPT_PULSION_PATH="$(dirname "${BASH_SOURCE[0]}")/pulsion"
-CONFIG_FILE="pulsion/config_pulsion"
-COMMAND="default"
-ACTION="process" # { process, help }
-VERBOSE=1 # { 1=high importance only, 5=all importance }
-DEPLOYMENT_CONFURATION_FILE_PATH="pulsion/config/deploy_config"
+function ensure_command_exist {
+
+	if is_function_exist $1; then
+		verbose 1 "- \"$1\" function implementation does not exist"
+		exit 1
+	fi;
+
+}
 
 # Gère le lecture des paramètres passés à la console
-function overload_environment_variables {
+function interpret_command_line {
 
 	command_set=0
 	help_mode=0
@@ -63,5 +62,8 @@ function overload_environment_variables {
 	done
 
 	COMMAND="command_$COMMAND"
+
+	ensure_command_exist
+
 
 }
