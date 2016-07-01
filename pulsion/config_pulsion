@@ -46,7 +46,7 @@ function command_test {
 	function process {
 
 		TEMP_FOLDER_PULSION_TEST=""
-		if hasParam --local "$@"; then
+		if has_param --local "$@"; then
 			echo -e "\n- Initialize (local mode)"
 			TEMP_FOLDER_PULSION_TEST="pulsion/tmp/tests"
 		else
@@ -58,10 +58,10 @@ function command_test {
 		console=$console_project_path
 		mode="Development mode"
 
-		if hasParam -f "$@"; then
+		if has_param -f "$@"; then
 			console=$fusioned_file_path
 			mode="Fusion mode"
-		elif hasParam -ff "$@"; then
+		elif has_param -ff "$@"; then
 			console=$fusioned_file_path_fail
 			mode="Fusion fail mode"
 		fi
@@ -94,7 +94,7 @@ function command_fusion {
 
 	function process {
 
-		if hasParam --local "$@"; then
+		if has_param --local "$@"; then
 			echo -e "\n- Initialize fusion tool (local mode)"
 			TEMPORARY_FOLDER="pulsion/tmp"
 			temporary_fusion_folder="$TEMPORARY_FOLDER/fusion"
@@ -157,11 +157,11 @@ function command_fusion {
 			fusion_output=$fusioned_file_path_fail
 
 			# Program automatic launch of the test on fail minimized file
-			if hasParam -t "$@"; then
-				if hasParam --force "$@"; then
+			if has_param -t "$@"; then
+				if has_param --force "$@"; then
 					tests_option="-ff"
 				fi
-				if hasParam --local "$@"; then
+				if has_param --local "$@"; then
 					tests_option="$tests_option --local"
 				fi
 			fi
@@ -171,9 +171,9 @@ function command_fusion {
 			fusion_output=$fusioned_file_path
 
 			# Program automatic launch of the test on fail minimized file
-			if hasParam -t "$@"; then
+			if has_param -t "$@"; then
 				tests_option="-f"
-				if hasParam --local "$@"; then
+				if has_param --local "$@"; then
 					tests_option="$tests_option --local"
 				fi
 			fi
