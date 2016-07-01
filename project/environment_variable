@@ -43,7 +43,7 @@ function overload_environment_variables {
 							break
 							;;
 
-					-h)		
+					-h)
 							ACTION="help $initial_params"
 							break
 							;;
@@ -53,8 +53,8 @@ function overload_environment_variables {
 								COMMAND=$1
 								command_set=1
 							else
-								ACTION="$ACTION $1"								
-							fi							
+								ACTION="$ACTION $1"
+							fi
 	                        shift
 	                        ;;
 

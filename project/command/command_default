@@ -16,7 +16,6 @@ Modules available ( Config : $CONFIG_FILE )
 $(list_available command)
 
 Parameters
-    -c [path] Config file path
     -v [level] Mode verbose (1..5)
     -h, --help Help for a specific command
 
@@ -33,7 +32,7 @@ Parameters
 
 }
 
-# List the available function ("command" or "install" params)
+# List the available function ("command" params)
 function list_available {
 
 	if [ $# -ne 1 ]; then
