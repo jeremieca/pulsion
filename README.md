@@ -106,7 +106,7 @@ Here you can write your bash script. Using helpers you can develop you bash scri
 
 Pulsion help you to develop your bash script faster. It provides a list of functions to make generic actions in your command process. This functions, available by default in Pulsion, are called helpers.
 
-  - verbose : Echo or not depending on the verbose level (1=high importance only, 5=all importance)
+  - verbose : Echo or not depending on the verbose level (1=very high importance only, 5= very low importance)
 
 ```shell
 verbose 3 "Echo only if level of verbose is <= 3"
