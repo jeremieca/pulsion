@@ -61,7 +61,7 @@ function command_hello { # create a hello command
 
 	function process {   # your bash script
 
-		if has_param --introduce-me "$@"; then   # has_param and verbose functions help you to develop faster
+		if has_param --introduce-me "$@"; then   # helpers functions help you to develop faster
 			verbose 1 "Hello world !"
 			verbose 1 "My name is Pulsion"
 		else
@@ -84,7 +84,7 @@ pulsion hello --introduce-me
 
 ### Helpers
 
-Helpers are functions that help you to develop your bash scripts faster.
+Helpers are predefined functions that help you to develop your bash scripts faster and safer.
 
 [All helpers](https://github.com/jeremieca/pulsion/wiki/Helpers)
 
