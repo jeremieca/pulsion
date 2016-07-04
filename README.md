@@ -2,7 +2,7 @@
 
 [ ![Codeship Status for deescut/Pulsion](https://codeship.com/projects/45add3d0-507b-0133-46c0-5abe51be460d/status?branch=open-source)](https://codeship.com/projects/107676)
 
-## Description
+### Description
 
 **Pulsion centralize all commands of your project in one unique place with no pain.**
 
@@ -20,27 +20,21 @@ When your project is configured, you can from a unique place :
 
 Pulsion is initially a tool for developper or sysadmin in a development environment.
 
-### Why to use it ?
+#### Why to use it ?
 
   - Pulsion have no external dependencies, we just need bash (available by default on linux, osx (and windows soon))
-  - Pulsion can be use without any install (but we provide a small optionnal script to help you create a new pulsion project and use it daily)
   - You write your scripts in bash. Bash is one of the most universal language. Moreover, Pulsion provides some functions in top of bash to write your scripts faster (seen Available helpers)
   - You can build a project hierarchy. Pulsion project can import another Pulsion project. So, you can have a unique place where all commands on a very very large project are centralized (ex: backend, frontend, database, deployment...)
 
-## Install
+### Install
 
-!! This step is optionnal but recommanded if you want to discover Pulsion easily or use it daily !!
-
-You must download /bin/pulsion of this repository and put it in /usr/local/bin with execute right.
-Then, you can go to your project folder and execute :
-
-  ```shell
-  pulsion init
-  ```
+1) Download ```/bin/pulsion```  
+2) Move it in ```/usr/local/bin``` with execute right.  
+3) Go to your project folder and execute ```shell pulsion init ```  
 
 Your first pulsion project is now created.
 
-## Usage
+### Usage
 
 After install, you can run at the root of project :
 
@@ -94,14 +88,6 @@ Imagine you have a pulsion project for backend, frontend and deployment. But you
 Helpers are functions that help you to develop your bash scripts faster.
 
 [All helpers](https://github.com/jeremieca/pulsion/wiki/Helpers)
-
-## Upgrade your pulsion project
-
-Once your pulsion project is configured, you can update it using auto-update command.
-
-```
-pulsion auto-update
-```
 
 ### Status of project
 
