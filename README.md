@@ -51,26 +51,33 @@ You can create your own commands in pulsion/config_pulsion file and run it with 
 A Pulsion command looks like that :
 
 ```shell
-function command_hello {    # hello is the name of command
+function command_hello { # create a hello command
 
-	function help {     # help is the function executed when user add --help or -h argument
+	function help {      # user can add --help or -h argument to display help
 
-		echo -e "Example of pulsion command"
+		echo "Example of pulsion command"
 
 	}
 
-	function process {  # process is the function to execute when command is launched
+	function process {   # your bash script
 
-		if has_param --name "$@"; then                   # has_param is an helper to check if an argument exist
-			myname="$(get_param_value --name "$@")"  # get_param_value is an helper to get value of an argument
-			verbose 1 "Hello $myname !"
+		if has_param --introduce-me "$@"; then   # has_param and verbose functions help you to develop faster
+			verbose 1 "Hello world !"
+			verbose 1 "My name is Pulsion"
 		else
-			verbose 1 "Hello world !"                # verbose provide multiple levels of echo (error, warn...)
+			verbose 1 "Hello world !"
 		fi
 
 	}
 
 }
+```
+
+```
+pulsion hello --introduce-me
+
+# Hello world !
+# My name is Pulsion
 ```
 
 [Create your own command with Pulsion](https://github.com/jeremieca/pulsion/wiki/Create-your-own-command)
