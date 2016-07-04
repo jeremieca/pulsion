@@ -44,7 +44,7 @@ After install, you can run at the root of project :
 
 This command list all commands availables in your current Pulsion project.
 
-## Create your own commands
+### Create your own commands
 
 You can create your own commands in pulsion/config_pulsion file and run it with pulsion command.
 
@@ -81,7 +81,7 @@ Helpers are functions that help you to develop your bash scripts faster.
 
 [All helpers](https://github.com/jeremieca/pulsion/wiki/Helpers)
 
-### Import for large projects
+### Pulsion for very large projects
 
 You can import a pulsion project in another.
 
