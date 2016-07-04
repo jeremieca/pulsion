@@ -54,9 +54,7 @@ This command list all commands availables in your current Pulsion project.
 
 You can create your own commands in pulsion/config_pulsion file and run it with pulsion command.
 
-### Overview
-
-A command looks like that :
+A Pulsion command looks like that :
 
 ```shell
 function command_hello {
@@ -81,22 +79,7 @@ function command_hello {
 }
 ```
 
-### Define a new command
-
-A Pulsion command is a function. The name of this function start with ```command_```.
-A command contain two functions : ```help``` and ```process```.
-For example, the command ```command_hello``` can be use with ```pulsion hello``` command in terminal.
-
-### Help function
-
-The help function is used when you call a pulsion command with -h parameter.
-For example ```pulsion hello -h```
-
-You can describe inside the help function the doc of your command.
-
-### Process function
-
-Here you can write your bash script. Using helpers you can develop you bash script faster than ever.
+[Create your own command with Pulsion](https://github.com/jeremieca/pulsion/wiki/Create-your-own-command)
 
 ### Import other pulsion project
 
@@ -106,7 +89,9 @@ Imagine you have a pulsion project for backend, frontend and deployment. But you
 
 [Know more about Import](https://github.com/jeremieca/pulsion/wiki/Projects-hierarchy)
 
-### Available helpers
+### Helpers
+
+Helpers are functions that help you to develop your bash scripts faster.
 
 [All helpers](https://github.com/jeremieca/pulsion/wiki/Helpers)
 
