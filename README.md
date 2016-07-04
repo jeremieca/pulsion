@@ -25,7 +25,7 @@ Pulsion is initially a tool for developper or sysadmin in a development environm
   - Pulsion have no external dependencies, we just need bash (available by default on linux, osx (and windows soon))
   - Pulsion can be use without any install (but we provide a small optionnal script to help you create a new pulsion project and use it daily)
   - You write your scripts in bash. Bash is one of the most universal language. Moreover, Pulsion provides some functions in top of bash to write your scripts faster (seen Available helpers)
-  - Coming soon : You can build a project hierarchy. Pulsion project can import another Pulsion project. So, you can have a unique place where all commands on a very very large project are centralized (ex: backend, frontend, database, deployment...)
+  - You can build a project hierarchy. Pulsion project can import another Pulsion project. So, you can have a unique place where all commands on a very very large project are centralized (ex: backend, frontend, database, deployment...)
 
 ### Status of project
 
@@ -102,6 +102,39 @@ You can describe inside the help function the doc of your command.
 
 Here you can write your bash script. Using helpers you can develop you bash script faster than ever.
 
+### Import other pulsion project
+
+You can import pulsion projects in another.
+
+Imagine you have a pulsion project for backend, frontend and deployment. But you need a unique place to manage all your project. So, you can just create a new pulsion project and import the three others.
+
+Note that a pulsion project can import a pulsion project that import a pulsion project that import a pulsion project...
+
+Then, from you main pulsion project, you can access to all commands and run it :
+
+```shell
+Commands available ( Config : pulsion/config_pulsion )
+    - auto-update
+    - hello
+    - list
+
+    - back::auto-update
+    - back::hello
+    - back::list
+    - back::deployment::auto-update
+    - back::deployment::hello
+    - back::deployment::list
+
+    - front::auto-update
+    - front::hello
+    - front::list
+```
+
+```shell
+# Run in deployment pulsion project the hello command
+pulsion back::deployment::hello
+```
+
 ### Available helpers
 
 Pulsion help you to develop your bash script faster. It provides a list of functions to make generic actions in your command process. This functions, available by default in Pulsion, are called helpers.
@@ -162,6 +195,13 @@ require_root
 ```shell
 if [[ $(get_platform) != "osx" ]]; then
 	...
+```
+
+  - get_index_in_array : Search a value in an array and return the index where value is found
+
+```shell
+index="$(get_index_in_array "$value" "${array[@]}")"
+# Return -1 if nothing is found
 ```
 
 #### Contributions to helpers
