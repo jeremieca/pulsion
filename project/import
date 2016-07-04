@@ -1,0 +1,131 @@
+#!/bin/bash
+
+IMPORTS_NAME=()
+IMPORTS_PATH=()
+IMPORTS_COMMANDS=()
+
+# Declare the import of pulsion project
+# Use in pulsion_config :
+#    import core "/.../path/myproject"
+function import {
+
+	name=$1
+	path=$2
+
+	if [ $# -eq 2 ]; then
+
+		verbose 4 "   - Import $name ($path)"
+		IMPORTS_NAME+=("$name")
+		IMPORTS_PATH+=("$path")
+		return
+
+	fi
+
+	verbose 1 "Import \"$name\" failed. You must specify name & path."
+	exit 1
+
+}
+
+# Iterate over imported pulsion project,
+# check if pulsion project are valids,
+# read all commands of imported pulsion projects and store it
+function load_imports {
+
+	length=${#IMPORTS_NAME[*]}
+
+	for (( i=0; i<=$(( $length -1 )); i++ ))
+	do
+		path=${IMPORTS_PATH[$i]}
+		name=${IMPORTS_NAME[$i]}
+
+		if ! is_pulsion_project "$path"; then
+			verbose 1 "Import of \"$name\" aborted."
+			IMPORTS_COMMANDS+=("/!\\ $name is not a valid pulsion project")
+			continue
+		fi
+
+		cd $path
+		IMPORTS_COMMANDS+=("$(./pulsion/pulsion list)")
+		cd - > /dev/null
+	done
+
+}
+
+# Check if provided folder is a pulsion project
+function is_pulsion_project {
+
+	path=$1
+
+	if [ ! -d $path ]; then
+		verbose 1 "Imported directory does not exist."
+		return 1
+	fi
+
+	cd $path
+
+	if [ ! -f ./pulsion/config_pulsion ]; then
+		cd - > /dev/null
+		verbose 1 "Imported project is not a pulsion project (no config_pulsion file)."
+		return 1
+	fi
+
+	if [ ! -f ./pulsion/pulsion ]; then
+		cd - > /dev/null
+		verbose 1 "Imported project is initialized (no pulsion script file)."
+		return 1
+	fi
+
+	cd - > /dev/null
+	return 0
+
+}
+
+# List imports as string
+function imports_to_string {
+
+	prefix_output=$1
+
+	if [ $# -ne 1 ]; then
+		verbose 2 "Error : Bad usage of function \"imports_to_string\""
+		return
+	fi
+
+	for (( i=0; i<=$(( $length -1 )); i++ ))
+	do
+		is_valid=false
+		name=${IMPORTS_NAME[$i]}
+		commands_availables=${IMPORTS_COMMANDS[$i]}
+
+		for command in $commands_availables
+		do
+		        verbose 1 "$prefix_output$name::$command"
+		done
+
+		verbose 1 ""
+	done
+
+}
+
+# Get path of an import from it's name
+function get_import_path {
+	name=$1
+	must_echo=$2
+
+	if [ $# -ne 2 ]; then
+		verbose 2 "Error : Bad usage of function \"get_import_path\""
+		return
+	fi
+
+	index="$(get_index_in_array "$name" "${IMPORTS_NAME[@]}")"
+
+	if [[ $index == -1 ]]; then
+		verbose 1 "\"$name\" pulsion project is not imported in project"
+		return 1
+	fi
+
+	if $must_echo; then
+		echo "${IMPORTS_PATH[$index]}"
+	fi
+
+	return 0
+}

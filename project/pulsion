@@ -3,17 +3,19 @@
 # Pulsion console
 #
 # All users scripts are in the config pulsion file
-# Usage : sudo ./scripts/pulsion [[Config pulsion file]]
-# Default config pulsion file parameter is set to scripts/config_pulsion
+# Usage : ./pulsion/pulsion
+# Default config pulsion file parameter is set to pulsion/config_pulsion
 #
 
 . project/environment_variables #include
-. project/interpreter #include
 . project/helpers #include
+. project/import #include
+. project/interpreter #include
 . project/launcher #include
 
 . project/command/command_default #include
 . project/command/command_auto-update #include
+. project/command/command_list #include
 
 # Launch the console
 launch_framework "$@"

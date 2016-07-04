@@ -12,8 +12,10 @@ function command_default {
 
 ************************************************
 
-Modules available ( Config : $CONFIG_FILE )
-$(list_available command)
+Commands available ( Config : $CONFIG_FILE )
+$(list_available command "    - ")
+
+$(imports_to_string "    - ")
 
 Parameters
     -v [level] Mode verbose (1..5)
@@ -35,18 +37,21 @@ Parameters
 # List the available function ("command" params)
 function list_available {
 
-	if [ $# -ne 1 ]; then
+	prefix_function=$1
+	prefix_output=$2
+
+	if [ $# -ne 2 ]; then
 		verbose 2 "Error : Bad usage of function \"list_available\""
 		return 1
 	fi
 
 	# Get all the declared variable begining by $1 params : (command, install...)
-	list=(`declare -F | cut -d" " -f3 | grep "^$1_"`)
+	list=(`declare -F | cut -d" " -f3 | grep "^${prefix_function}_"`)
 
 	for item in ${list[@]}
 	do
 		if [[ "$item" != "$1_default" ]]; then
-			echo "    - ${item/$1_/}"
+			echo "$prefix_output${item/$1_/}"
 		fi
 	done
 

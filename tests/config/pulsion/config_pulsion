@@ -11,7 +11,7 @@ function command_hello {
 	function process {
 
 		echo "Hello world !"
-	
+
 	}
 
 }

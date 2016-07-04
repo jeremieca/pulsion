@@ -1,6 +1,10 @@
 #!/bin/bash
 
-function check_config_file {
+function load_config_file {
+
+	if has_param -c "$@"; then
+		CONFIG_FILE="$(get_param_value -c "$@")"
+	fi
 
 	if [ -f $CONFIG_FILE ]; then
 		verbose 3 "- Load the default configuration script: $CONFIG_FILE"
@@ -14,13 +18,25 @@ function check_config_file {
 
 function launch_framework {
 
+	# Load configuration file
+	load_config_file "$@"
+
+	# Import child pulsion projects
+	load_imports
+
 	# Parse the command line parameters
 	interpret_command_line "$@"
 
-	# Load configuration file
-	check_config_file
+	if ! is_forwarded "$@"; then
 
-	$COMMAND
-	$ACTION
+		if ! is_function_exist $COMMAND; then
+			verbose 1 "- \"$1\" function implementation does not exist"
+			exit 1
+		fi;
+
+		$COMMAND
+		$ACTION
+
+	fi
 
 }

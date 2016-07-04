@@ -15,9 +15,9 @@ test_load_config_file() {
 test_read_list_available() {
 
 	config="$(echo $CONSOLE)_available"
-	list="$config list_available"
+	list="$config list"
 
-	commands=$($list command)
+	commands=$($list command "")
 	help_long=$($config c1 --help)
 	help_short=$($config c1 -h)
 	process_launch=$($config c2 process)

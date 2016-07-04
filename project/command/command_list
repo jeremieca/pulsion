@@ -1,0 +1,20 @@
+#!/bin/bash
+
+function command_list {
+
+	function help {
+
+		echo -e "  List all Pulsion commands availables"
+
+	}
+
+	function process {
+
+		verbose 1 "$(list_available command "")"
+		verbose 1 ""
+
+		verbose 1 "$(imports_to_string "")"
+
+	}
+
+}

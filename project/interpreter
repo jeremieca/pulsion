@@ -1,17 +1,39 @@
 #!/bin/bash
 
-function ensure_command_exist {
-
-	if is_function_exist $1; then
-		verbose 1 "- \"$1\" function implementation does not exist"
-		exit 1
-	fi;
-
-}
+FORWARDED=1
 
 # Gère le lecture des paramètres passés à la console
 function interpret_command_line {
+	if [[ $1 == *"::"* ]]; then
+		forward_command "$@"
+		FORWARDED=0
+	else
+		execute_command "$@"
+		FORWARDED=1
+	fi
+}
 
+# Execution of command require to forward command to an imported pulsion project
+function forward_command {
+	IFS=':'
+	read -r sub_pulsion_project_name rest <<< "$@"
+	IFS=' '
+	read -r cmd useless <<< "$rest"
+
+	if get_import_path "$sub_pulsion_project_name" false; then
+		path="$(get_import_path "$sub_pulsion_project_name" true)"
+	else
+		return 1
+	fi
+
+	shift
+	cd "$path" > /dev/null
+	./pulsion/pulsion "${cmd:1}" "$@"
+	cd - > /dev/null
+}
+
+# Execute the command
+function execute_command {
 	command_set=0
 	help_mode=0
 	initial_params="$@"
@@ -22,12 +44,7 @@ function interpret_command_line {
 
 	                -c)		# Path to configuration file
 	                        shift
-	                        if test $# -gt 0; then
-	                                CONFIG_FILE=$1
-	                        else
-	                                echo "-c option wait a config file path"
-	                                exit 1
-	                        fi
+	                        ## Already process in launcher load_config_file
 	                        shift
 	                        ;;
 
@@ -63,7 +80,8 @@ function interpret_command_line {
 
 	COMMAND="command_$COMMAND"
 
-	ensure_command_exist
+}
 
-
+function is_forwarded {
+	return $FORWARDED
 }
