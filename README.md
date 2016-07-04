@@ -30,7 +30,7 @@ Pulsion is initially a tool for developper or sysadmin in a development environm
 
 1) Download ```/bin/pulsion```  
 2) Move it in ```/usr/local/bin``` with execute right.  
-3) Go to your project folder and execute ```shell pulsion init ```  
+3) Go to your project folder and execute ``` pulsion init ```  
 
 Your first pulsion project is now created.
 
