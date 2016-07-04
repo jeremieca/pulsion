@@ -110,6 +110,14 @@ Imagine you have a pulsion project for backend, frontend and deployment. But you
 
 Note that a pulsion project can import a pulsion project that import a pulsion project that import a pulsion project...
 
+To import a project you must do :
+
+```shell
+import back "./back-server"
+import front "./front"
+import nameOfYouChoice "./path-to-pulsion-project"
+```
+
 Then, from you main pulsion project, you can access to all commands and run it :
 
 ```shell
