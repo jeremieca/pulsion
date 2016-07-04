@@ -75,19 +75,19 @@ function command_hello {    # hello is the name of command
 
 [Create your own command with Pulsion](https://github.com/jeremieca/pulsion/wiki/Create-your-own-command)
 
-### Import other pulsion project
-
-You can import pulsion projects in another.
-
-Imagine you have a pulsion project for backend, frontend and deployment. But you need a unique place to manage all your project. So, you can just create a new pulsion project and import the three others.
-
-[Know more about Import](https://github.com/jeremieca/pulsion/wiki/Projects-hierarchy)
-
 ### Helpers
 
 Helpers are functions that help you to develop your bash scripts faster.
 
 [All helpers](https://github.com/jeremieca/pulsion/wiki/Helpers)
+
+### Import for large projects
+
+You can import a pulsion project in another.
+
+Imagine you have multiple pulsion projects for backend, frontend and deployment. But you need a unique place to manage all your project. So, you can just create a new pulsion project and import the three others.
+
+[Know more about Import](https://github.com/jeremieca/pulsion/wiki/Projects-hierarchy)
 
 ### Status of project
 
