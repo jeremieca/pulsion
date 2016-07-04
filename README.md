@@ -27,10 +27,6 @@ Pulsion is initially a tool for developper or sysadmin in a development environm
   - You write your scripts in bash. Bash is one of the most universal language. Moreover, Pulsion provides some functions in top of bash to write your scripts faster (seen Available helpers)
   - You can build a project hierarchy. Pulsion project can import another Pulsion project. So, you can have a unique place where all commands on a very very large project are centralized (ex: backend, frontend, database, deployment...)
 
-### Status of project
-
-We use Pulsion massively on OSX without any problems for 2 years. However, Pulsion **is under heavy development** and need to be tested on multiples platforms. Your issues and pull request are welcome.
-
 ## Install
 
 !! This step is optionnal but recommanded if you want to discover Pulsion easily or use it daily !!
@@ -108,113 +104,11 @@ You can import pulsion projects in another.
 
 Imagine you have a pulsion project for backend, frontend and deployment. But you need a unique place to manage all your project. So, you can just create a new pulsion project and import the three others.
 
-Note that a pulsion project can import a pulsion project that import a pulsion project that import a pulsion project...
-
-To import a project you must do :
-
-```shell
-import back "./back-server"
-import front "./front"
-import nameOfYouChoice "./path-to-pulsion-project"
-```
-
-Then, from you main pulsion project, you can access to all commands and run it :
-
-```shell
-Commands available ( Config : pulsion/config_pulsion )
-    - auto-update
-    - hello
-    - list
-
-    - back::auto-update
-    - back::hello
-    - back::list
-    - back::deployment::auto-update
-    - back::deployment::hello
-    - back::deployment::list
-
-    - front::auto-update
-    - front::hello
-    - front::list
-```
-
-```shell
-# Run in deployment pulsion project the hello command
-pulsion back::deployment::hello
-```
+[Know more about Import](https://github.com/jeremieca/pulsion/wiki/Projects-hierarchy)
 
 ### Available helpers
 
-Pulsion help you to develop your bash script faster. It provides a list of functions to make generic actions in your command process. This functions, available by default in Pulsion, are called helpers.
-
-  - verbose : Echo or not depending on the verbose level (1=very high importance only, 5= very low importance)
-
-```shell
-verbose 3 "Echo only if level of verbose is <= 3"
-```
-
-```shell
-pulsion hello -v 3 # Verbose level
-```
-
-  - has_param : Return true (0) if the param is present
-
-```shell
-if has_param --name "$@"; then
-	...
-```
-
-  - get_param_value : Return the value of a parameter
-
-```shell
-myname="$(get_param_value --name "$@")"
-```
-
-  - is_command_exist : Return true (0) if the shell command exists
-
-```shell
-if is_command_exist echo; then
-	echo "Echo is a valid shell command"
-fi
-```
-
-  - is_function_exist : Return true (0) if the function exists
-
-```shell
-if is_function_exist echo; then
-	...
-```
-
-  - is_root : Return true (0) if the user have root access
-
-```shell
-if is_root; then
-	...
-```
-
-  - require_root : Exit if the user don't have root access
-
-```shell
-require_root
-```
-
-  - get_platform : Return current platform #{osx, linux} (windows not detected for the moment)
-
-```shell
-if [[ $(get_platform) != "osx" ]]; then
-	...
-```
-
-  - get_index_in_array : Search a value in an array and return the index where value is found
-
-```shell
-index="$(get_index_in_array "$value" "${array[@]}")"
-# Return -1 if nothing is found
-```
-
-#### Contributions to helpers
-
-If you think that an helper can be added, create an issue and talk us about it or push a pull request.
+[All helpers](https://github.com/jeremieca/pulsion/wiki/Helpers)
 
 ## Upgrade your pulsion project
 
@@ -224,6 +118,8 @@ Once your pulsion project is configured, you can update it using auto-update com
 pulsion auto-update
 ```
 
-Note that Pulsion project are independant and Pulsion will be updated only for the current project.
+### Status of project
+
+We use Pulsion massively on OSX without any problems for 2 years. However, Pulsion **is under heavy development** and need to be tested on multiples platforms. Your issues and pull request are welcome.
 
 Have fun !  
