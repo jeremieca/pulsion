@@ -51,21 +51,21 @@ You can create your own commands in pulsion/config_pulsion file and run it with 
 A Pulsion command looks like that :
 
 ```shell
-function command_hello {
+function command_hello {    # hello is the name of command
 
-	function help {
+	function help {     # help is the function executed when user add --help or -h argument
 
 		echo -e "Example of pulsion command"
 
 	}
 
-	function process {
+	function process {  # process is the function to execute when command is launched
 
-		if has_param --name "$@"; then
-			myname="$(get_param_value --name "$@")"
+		if has_param --name "$@"; then                   # has_param is an helper to check if an argument exist
+			myname="$(get_param_value --name "$@")"  # get_param_value is an helper to get value of an argument
 			verbose 1 "Hello $myname !"
 		else
-			verbose 1 "Hello world !"
+			verbose 1 "Hello world !"                # verbose provide multiple levels of echo (error, warn...)
 		fi
 
 	}
