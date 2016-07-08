@@ -25,7 +25,7 @@ Pulsion is initially a tool for developper or sysadmin in a development environm
   - **Reduce barriers to entry on project** : To manage all the project, developpers have just one command to use regardless of your stack : ```pulsion``` (instead of grunt, gulp, mongod, mvn, npm, bower...)
   - **Write complex bash cli easily and very fast** : bash is one of the most universal and documented language. Howhever it is not always easy to use. It's why Pulsion provides functions and conventions in top of bash that transform it in a smart language.
   - **Gather all your projects in one place** : Front, back, database, deployment in one place. You can build a project hierarchy. Pulsion project can import another Pulsion project. So, you can have a unique place where all commands on a very very large project are centralized (ex: backend, frontend, database, deployment...).
-  - **Light and easy to export** : Pulsion have no external dependencies, we just need bash (available by default on linux, osx (and windows soon)) to launch it. So, if you move your project on a new machine, import your project folder is enough to use pulsion. Install is optionnal.
+  - **Light and easy to export** : Pulsion have no external dependencies, we just need bash (available by default on linux, osx (and windows soon)) to launch it. So, if you move your project on a new machine, import your project folder is enough to use pulsion. Install is optionnal to launch pulsion.
  
   
 ### Install
