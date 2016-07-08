@@ -15,17 +15,17 @@ function init {
 		exit 1
 	fi
 
-	mkdir -p pulsion/tmp
+        mkdir -p pulsion/tmp
 
-	cd pulsion/tmp
-	git clone https://github.com/jeremieca/pulsion-skeleton.git
+        cd pulsion/tmp
+        git clone https://github.com/jeremieca/pulsion-skeleton.git skeleton
 
-	cd ..
-	cp -r tmp/pulsion-skeleton/ .
-	rm -Rf .git
-	rm -Rf ./tmp
+        cd ..
+        cp -r tmp/skeleton/get_pulsion get_pulsion
+        rm -Rf .git
+        rm -Rf ./tmp
 
-	chmod +x get_pulsion
+        chmod +x get_pulsion
 
 	cd ..
 	./pulsion/get_pulsion
