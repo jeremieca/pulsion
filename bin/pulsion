@@ -21,7 +21,7 @@ function init {
         git clone https://github.com/jeremieca/pulsion-skeleton.git skeleton
 
         cd ..
-        cp -r tmp/skeleton/get_pulsion get_pulsion
+        cp -r tmp/skeleton/* .
         rm -Rf .git
         rm -Rf ./tmp
 
