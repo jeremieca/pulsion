@@ -25,6 +25,11 @@ function init {
         rm -Rf .git
         rm -Rf ./tmp
 
+	if [ ! -f get_pulsion ]; then
+		echo "A problem occur, get_pulsion is not found"
+		exit 1
+	fi
+	
         chmod +x get_pulsion
 
 	cd ..
