@@ -26,8 +26,8 @@ Pulsion is initially a tool for developper or sysadmin in a development environm
   - **Write complex bash cli easily and very fast** : bash is one of the most universal and documented language. Howhever it is not always easy to use. It's why Pulsion provides functions and conventions in top of bash that transform it in a smart language.
   - **Gather all your projects in one place** : Front, back, database, deployment in one place. You can build a project hierarchy. Pulsion project can import another Pulsion project. So, you can have a unique place where all commands on a very very large project are centralized (ex: backend, frontend, database, deployment...).
   - **Light and easy to export** : Pulsion have no external dependencies, we just need bash (available by default on linux, osx (and windows soon)) to launch it. So, if you move your project on a new machine, import your project folder is enough to use pulsion. Install is optionnal to launch pulsion.
- 
-  
+
+
 ### Install
 
   1. Download ```/bin/pulsion```  
@@ -64,10 +64,10 @@ function command_hello { # create a hello command
 	function process {   # your bash script
 
 		if has_param --introduce-me "$@"; then   # helpers functions help you to develop faster
-			verbose 1 "Hello world !"
-			verbose 1 "My name is Pulsion"
+			print 1 "Hello world !"
+			print 1 "My name is Pulsion"
 		else
-			verbose 1 "Hello world !"
+			print 1 "Hello world !"
 		fi
 
 	}

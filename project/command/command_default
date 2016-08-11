@@ -41,7 +41,7 @@ function list_available {
 	prefix_output=$2
 
 	if [ $# -ne 2 ]; then
-		verbose 2 "Error : Bad usage of function \"list_available\""
+		print 2 "Error : Bad usage of function \"list_available\""
 		return 1
 	fi
 

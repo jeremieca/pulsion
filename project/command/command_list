@@ -10,10 +10,10 @@ function command_list {
 
 	function process {
 
-		verbose 1 "$(list_available command "")"
-		verbose 1 ""
+		print 1 "$(list_available command "")"
+		print 1 ""
 
-		verbose 1 "$(imports_to_string "")"
+		print 1 "$(imports_to_string "")"
 
 	}
 

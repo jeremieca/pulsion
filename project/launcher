@@ -7,10 +7,10 @@ function load_config_file {
 	fi
 
 	if [ -f $CONFIG_FILE ]; then
-		verbose 3 "- Load the default configuration script: $CONFIG_FILE"
+		print 3 "- Load the default configuration script: $CONFIG_FILE"
 		source $CONFIG_FILE
 	else
-		verbose 1 "- Invalid configuration file: $CONFIG_FILE"
+		print 1 "- Invalid configuration file: $CONFIG_FILE"
 		exit 1
 	fi
 
@@ -30,7 +30,7 @@ function launch_framework {
 	if ! is_forwarded "$@"; then
 
 		if ! is_function_exist $COMMAND; then
-			verbose 1 "- \"$1\" function implementation does not exist"
+			print 1 "- \"$1\" function implementation does not exist"
 			exit 1
 		fi;
 

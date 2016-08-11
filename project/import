@@ -14,14 +14,14 @@ function import {
 
 	if [ $# -eq 2 ]; then
 
-		verbose 4 "   - Import $name ($path)"
+		print 4 "   - Import $name ($path)"
 		IMPORTS_NAME+=("$name")
 		IMPORTS_PATH+=("$path")
 		return
 
 	fi
 
-	verbose 1 "Import \"$name\" failed. You must specify name & path."
+	print 1 "Import \"$name\" failed. You must specify name & path."
 	exit 1
 
 }
@@ -39,7 +39,7 @@ function load_imports {
 		name=${IMPORTS_NAME[$i]}
 
 		if ! is_pulsion_project "$path"; then
-			verbose 1 "Import of \"$name\" aborted."
+			print 1 "Import of \"$name\" aborted."
 			IMPORTS_COMMANDS+=("/!\\ $name is not a valid pulsion project")
 			continue
 		fi
@@ -57,7 +57,7 @@ function is_pulsion_project {
 	path=$1
 
 	if [ ! -d $path ]; then
-		verbose 1 "Imported directory does not exist."
+		print 1 "Imported directory does not exist."
 		return 1
 	fi
 
@@ -65,13 +65,13 @@ function is_pulsion_project {
 
 	if [ ! -f ./pulsion/config_pulsion ]; then
 		cd - > /dev/null
-		verbose 1 "Imported project is not a pulsion project (no config_pulsion file)."
+		print 1 "Imported project is not a pulsion project (no config_pulsion file)."
 		return 1
 	fi
 
 	if [ ! -f ./pulsion/pulsion ]; then
 		cd - > /dev/null
-		verbose 1 "Imported project is initialized (no pulsion script file)."
+		print 1 "Imported project is initialized (no pulsion script file)."
 		return 1
 	fi
 
@@ -86,7 +86,7 @@ function imports_to_string {
 	prefix_output=$1
 
 	if [ $# -ne 1 ]; then
-		verbose 2 "Error : Bad usage of function \"imports_to_string\""
+		print 2 "Error : Bad usage of function \"imports_to_string\""
 		return
 	fi
 
@@ -98,10 +98,10 @@ function imports_to_string {
 
 		for command in $commands_availables
 		do
-		        verbose 1 "$prefix_output$name::$command"
+		    print 1 "$prefix_output$name::$command"
 		done
 
-		verbose 1 ""
+		print 1 ""
 	done
 
 }
@@ -112,14 +112,14 @@ function get_import_path {
 	must_echo=$2
 
 	if [ $# -ne 2 ]; then
-		verbose 2 "Error : Bad usage of function \"get_import_path\""
+		print 2 "Error : Bad usage of function \"get_import_path\""
 		return
 	fi
 
 	index="$(get_index_in_array "$name" "${IMPORTS_NAME[@]}")"
 
 	if [[ $index == -1 ]]; then
-		verbose 1 "\"$name\" pulsion project is not imported in project"
+		print 1 "\"$name\" pulsion project is not imported in project"
 		return 1
 	fi
 
