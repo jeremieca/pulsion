@@ -104,15 +104,25 @@ function get_param_value {
 }
 
 # Display or not the param $1 depending on the verbose level
-function verbose {
+function print {
 
 	if [ $# -eq 2 ]; then
-
 		if [ $1 -le $VERBOSE ]; then
 			echo "$2"
 		fi
-
 	fi
+
+	# If no verbose, always display the value
+	if [ $# -eq 1 ]; then
+		echo "$1"
+	fi
+
+}
+
+function verbose {
+
+	print "$@"
+
 }
 
 # Search a value in an array and return the index where value is found
