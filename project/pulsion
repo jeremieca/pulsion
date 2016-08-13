@@ -8,7 +8,10 @@
 #
 
 . project/environment_variables #include
-. project/helpers #include
+
+. project/helpers/generic #include
+. project/helpers/stream #include
+
 . project/import #include
 . project/interpreter #include
 . project/launcher #include
