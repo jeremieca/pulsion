@@ -41,3 +41,46 @@ function command_parameters {
 	}
 
 }
+
+function command_stream {
+
+	function help {
+
+		echo "Basic test of streams"
+
+	}
+
+	function process {
+
+		stream::print 1 echo "yes"
+		stream::print 2 echo "no"
+
+	}
+
+}
+
+function command_streamfilter {
+
+	function help {
+
+		echo "Stream filter"
+
+	}
+
+	function process {
+
+		function whendone {
+			echo "$1 done"
+		}
+
+		stream::action whendone \
+			stream::filter *"mongoose"* \
+				echo "super mongoose"
+
+		stream::action whendone \
+			stream::filter *"mongoose"* \
+				echo "super filter"
+
+	}
+
+}

@@ -1,0 +1,206 @@
+#!/bin/bash
+
+# Redirect the stream to the stream::private functions
+
+function stream::print {
+	stream::private
+	verbose="$1"
+	shift;
+	"$@" 2>&1 | Write "$verbose"
+}
+
+function stream::print-stderr {
+	stream::private
+	verbose="$1"
+	shift;
+	"$@" 2>&1 >/dev/null | Write "$verbose"
+}
+
+function stream::print-stdout {
+	stream::private
+	verbose="$1"
+	shift;
+	"$@" | Write "$verbose"
+}
+
+function stream::filter {
+	stream::private
+	filterRegex="$1"
+	shift;
+	"$@" 2>&1 | Filter "$filterRegex"
+}
+
+function stream::action {
+	stream::private
+	action="$1"
+	shift;
+	"$@" 2>&1 | Action "$action"
+}
+
+function stream::to-file {
+	filename="$1"
+	shift;
+	"$@" > $filename 2>&1
+}
+
+
+# Apply required behaviour on input lines feed
+
+function stream::private {
+
+	# Print each input value with specific verbose
+	function Write {
+		while read IN
+		do
+			print $1 "$IN"
+		done
+	}
+
+	# Exec each input value as FIRST param of a command
+	function Action {
+		while read IN
+		do
+			"$1" "$IN"
+		done
+	}
+
+	# Print at verbose 1 only if regex match with input value
+	function Filter {
+		while read IN
+		do
+			if [[ "$IN" == $1 ]]; then
+				print 1 "$IN"
+			fi
+		done
+	}
+
+}
+
+# Manage multiple feeds at the same time
+
+# Store the total number of duplication of feed we have (maxi 5)
+declare DUPLICATORS_COMMANDS_COUNT=0
+
+function stream::duplicator::new {
+	DUPLICATORS_COMMANDS_COUNT=0
+}
+
+# Add a new duplication of the data feed.
+# 	New feed data spreads through pipeline of commands.
+# 	Pipeline can contain an infinite number of commands.
+function stream::duplicator::add {
+
+	if [ "$DUPLICATORS_COMMANDS_COUNT" -gt 5 ]; then
+		p 1 "You can't add more than five elements in pipeline. Open an issue on Github if you need more."
+		return
+	fi
+
+	OLDIFS=$IFS
+	IFS='='
+
+	read -a DUPLICATORS_COMMANDS_$DUPLICATORS_COMMANDS_COUNT <<< "$@"
+
+	((DUPLICATORS_COMMANDS_COUNT++))
+	IFS=$OLDIFS
+}
+
+# Take the data source comand, execute it and redirect it output to all feed pipelines
+function stream::duplicator::forward {
+	stream::private
+
+	if [ $DUPLICATORS_COMMANDS_COUNT -eq 1 ]; then
+		"$@" 2>&1 | tee >(${DUPLICATORS_COMMANDS_0[@]} Write 1) \
+						>/dev/null
+	fi
+	if [ $DUPLICATORS_COMMANDS_COUNT -eq 2 ]; then
+		"$@" 2>&1 | tee >(${DUPLICATORS_COMMANDS_0[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_1[@]} Write 1) \
+						>/dev/null
+	fi
+	if [ $DUPLICATORS_COMMANDS_COUNT -eq 3 ]; then
+		"$@" 2>&1 | tee >(${DUPLICATORS_COMMANDS_0[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_1[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_2[@]} Write 1) \
+						>/dev/null
+	fi
+	if [ $DUPLICATORS_COMMANDS_COUNT -eq 4 ]; then
+		"$@" 2>&1 | tee >(${DUPLICATORS_COMMANDS_0[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_1[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_2[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_3[@]} Write 1) \
+						>/dev/null
+	fi
+	if [ $DUPLICATORS_COMMANDS_COUNT -eq 5 ]; then
+		"$@" 2>&1 | tee >(${DUPLICATORS_COMMANDS_0[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_1[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_2[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_3[@]} Write 1) \
+						>(${DUPLICATORS_COMMANDS_4[@]} Write 1) \
+						>/dev/null
+	fi
+}
+
+
+
+# *********** How to close a channel after it is started ************
+# FIXME Problem is that pipe run in an isolate scope of variables
+# 		It's why stream::channel::stop fail because of STREAM_CHANNELS_ that is not available
+#		Child scope can read parent scope but not write in it so channel::stop can't update parent when call in loading (in pipe)
+# 		But channel can write in parent if it launch from main script and loading can read it
+#		Not perfectly sure of problem...
+#
+#
+# function ChannelFilter {
+# 	stream_name="$1"
+# 	while read IN
+# 	do
+# 		echo ${!stream_name[0]}
+# 		if [[ "${!stream_name[0]}" == "run"  ]]; then
+# 			print 1 "$IN"
+# 		fi
+# 	done
+# }
+#
+# function stream::channel::control {
+# 	stream_name="STREAM_CHANNELS_$1"
+# 	if [ -z ${!stream_name} ]; then
+# 		echo "declare"
+# 		eval "$stream_name=(\"run\")"
+# 	fi
+# 	shift;
+# 	"$@" 2>&1 | ChannelFilter "$stream_name"
+# }
+#
+# function stream::channel::stop {
+# 	stream_name="STREAM_CHANNELS_$1"
+# 	echo "stop $stream_name ${!stream_name}"
+# 	eval "$stream_name=(\"stopped\")"
+# }
+
+# ******** Debug or improve stream::duplicator::add
+
+# If I want to process from top to bottom ---
+
+# read -a reverse_array <<< "$@"
+#
+# final_array_name="DUPLICATORS_COMMANDS_$DUPLICATORS_COMMANDS_COUNT"
+#
+# eval "$final_array_name=()"
+# for ((i=${#reverse_array[@]} - 1; i >= 0; i--)) ; do
+#     eval "$final_array_name+=(\"${reverse_array[i]}\")"
+# done
+
+# For debug ---
+
+# var="DUPLICATORS_COMMANDS_$DUPLICATORS_COMMANDS_COUNT[0]"
+# var1="DUPLICATORS_COMMANDS_$DUPLICATORS_COMMANDS_COUNT[1]"
+# var2="DUPLICATORS_COMMANDS_$DUPLICATORS_COMMANDS_COUNT[2]"
+# var3="DUPLICATORS_COMMANDS_$DUPLICATORS_COMMANDS_COUNT[3]"
+# var4="DUPLICATORS_COMMANDS_$DUPLICATORS_COMMANDS_COUNT[4]"
+# varall="DUPLICATORS_COMMANDS_$DUPLICATORS_COMMANDS_COUNT[@]"
+# echo "0: ${!var}"
+# echo "1: ${!var1}"
+# echo "2: ${!var2}"
+# echo "3: ${!var3}"
+# echo "4: ${!var4}"
+# echo "all: ${!varall}"
