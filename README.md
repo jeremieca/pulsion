@@ -103,6 +103,9 @@ Imagine you have multiple pulsion projects for backend, frontend and deployment.
 ### Status of project
 
 Pulsion continuous integration run on Linux but Pulsion also works on OSX (we use it everyday) and on Windows (with bash emulator).  
+  
+Currently, Pulsion require Git to be updated easily. But soon, we'll remove this dependency between Pulsion and Git. Then, the only dependency to use Pulsion will be bash (>= 3).  
+  
 Note that Pulsion **is under heavy development**. Your issues and pull request are welcome.
 
 Have fun !  
