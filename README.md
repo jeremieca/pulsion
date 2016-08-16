@@ -88,7 +88,9 @@ pulsion hello --introduce-me
 
 Helpers are predefined functions that help you to develop your bash scripts faster and safer.
 
-[All helpers](https://github.com/jeremieca/pulsion/wiki/Helpers)
+[All helpers](https://github.com/jeremieca/pulsion/wiki/Helpers)  
+[Generic helpers](https://github.com/jeremieca/pulsion/wiki/Helpers#generic-helpers)    
+[Stream helpers](https://github.com/jeremieca/pulsion/wiki/Helpers#stream-helpers)  
 
 ### Pulsion for very large projects
 
