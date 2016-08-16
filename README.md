@@ -102,6 +102,7 @@ Imagine you have multiple pulsion projects for backend, frontend and deployment.
 
 ### Status of project
 
-We use Pulsion massively on OSX without any problems for 2 years. However, Pulsion **is under heavy development** and need to be tested on multiples platforms. Your issues and pull request are welcome.
+Pulsion continuous integration run on Linux but Pulsion also works on OSX (we use it everyday) and on Windows (with bash emulator).  
+Note that Pulsion **is under heavy development**. Your issues and pull request are welcome.
 
 Have fun !  
