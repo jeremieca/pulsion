@@ -88,7 +88,9 @@ pulsion hello --introduce-me
 
 Helpers are predefined functions that help you to develop your bash scripts faster and safer.
 
-[All helpers](https://github.com/jeremieca/pulsion/wiki/Helpers)
+  - [Generic helpers](https://github.com/jeremieca/pulsion/wiki/Helpers#generic-helpers) : Small easy to user functions (print, require_root, get_platform...)
+  - [Stream helpers](https://github.com/jeremieca/pulsion/wiki/Helpers#stream-helpers) : Easly manage stdin and stdout feeds with filter, duplicators, actions...
+
 
 ### Pulsion for very large projects
 
@@ -100,6 +102,10 @@ Imagine you have multiple pulsion projects for backend, frontend and deployment.
 
 ### Status of project
 
-We use Pulsion massively on OSX without any problems for 2 years. However, Pulsion **is under heavy development** and need to be tested on multiples platforms. Your issues and pull request are welcome.
+Pulsion continuous integration run on Linux but Pulsion also works on OSX (we use it everyday) and on Windows (with bash emulator).  
+  
+Currently, Pulsion require Git to be updated easily. But soon, we'll remove this dependency between Pulsion and Git. Then, the only dependency to use Pulsion will be bash (>= 3).  
+  
+Note that Pulsion **is under heavy development**. Your issues and pull request are welcome.
 
 Have fun !  
