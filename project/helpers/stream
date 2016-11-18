@@ -68,7 +68,7 @@ function stream::private {
 	function Filter {
 		while read IN
 		do
-			if [[ "$IN" == $1 ]]; then
+			if [[ "$IN" =~ $1 ]]; then
 				print 1 "$IN"
 			fi
 		done
