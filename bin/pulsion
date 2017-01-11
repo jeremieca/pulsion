@@ -3,6 +3,8 @@
 # Pulsion script is an easy way to initialize or use pulsion projet
 # Pulsion can always be run or initialized without this script
 
+VERSION=1
+
 function init {
 
 	if [ -d pulsion ]; then
