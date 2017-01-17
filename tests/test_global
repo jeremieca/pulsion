@@ -42,16 +42,16 @@ test_parameter_reader() {
 }
 
 # Test parameters reader
-test_stream_simple() {
-
-	successCounter=`$CONSOLE stream | grep -c "yes"`
-	failCounter=`$CONSOLE stream | grep -c "no"`
-	filterCounter=`$CONSOLE streamfilter | grep -c "mongoose"`
-	filterFailCounter=`$CONSOLE streamfilter | grep -c "filter"`
-
-	assertTrue "Stream don't write while verbose is good" "[ ${successCounter} -eq 1 ]"
-	assertTrue "Stream write while verbose is bad" "[ ${failCounter} -eq 0 ]"
-	assertTrue "Stream filter fail to match regex" "[ ${filterCounter} -eq 1 ]"
-	assertTrue "Stream filter does not filter" "[ ${filterFailCounter} -eq 0 ]"
-
-}
+# test_stream_simple() {
+# 
+# 	successCounter=`$CONSOLE stream | grep -c "yes"`
+# 	failCounter=`$CONSOLE stream | grep -c "no"`
+# 	filterCounter=`$CONSOLE streamfilter | grep -c "mongoose"`
+# 	filterFailCounter=`$CONSOLE streamfilter | grep -c "filter"`
+# 
+# 	assertTrue "Stream don't write while verbose is good" "[ ${successCounter} -eq 1 ]"
+# 	assertTrue "Stream write while verbose is bad" "[ ${failCounter} -eq 0 ]"
+# 	assertTrue "Stream filter fail to match regex" "[ ${filterCounter} -eq 1 ]"
+# 	assertTrue "Stream filter does not filter" "[ ${filterFailCounter} -eq 0 ]"
+# 
+# }
