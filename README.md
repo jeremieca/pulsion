@@ -1,6 +1,6 @@
 # Pulsion project
 
-[)
+[ ![Codeship Status for jeremieca/pulsion](https://codeship.com/projects/da4626c0-beea-0134-4c71-0204b74559cb/status?branch=open-source)](https://codeship.com/projects/196408)
 
 ### Description
 
