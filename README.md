@@ -1,6 +1,6 @@
 # Pulsion project
 
-[ ![Codeship Status for deescut/Pulsion](https://codeship.com/projects/45add3d0-507b-0133-46c0-5abe51be460d/status?branch=open-source)](https://codeship.com/projects/107676)
+[)
 
 ### Description
 
