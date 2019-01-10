@@ -16,6 +16,25 @@ function is_command_exist {
 
 }
 
+# Call pulsion from pulsion
+function pulsion {
+
+	# Looking for pulsion config in parent folders
+	while ! [ -f pulsion/pulsion ]
+	do
+		if [ $(pwd) == "/" ]
+		then
+			echo "/!\ This project is not a Pulsion project /!\ "
+			echo "You can run \"pulsion init\" to initialize a Pulsion project"
+			exit 0
+		fi
+		cd ..
+	done
+
+	./pulsion/pulsion "$@"
+
+}
+
 # Exit if user is not root
 function require_root {
 
