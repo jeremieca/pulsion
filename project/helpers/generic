@@ -35,6 +35,16 @@ function pulsion {
 
 }
 
+# Forward a param to another command if present (doesn't forward param value !)
+function forward_param {
+    param="$1"
+    shift
+
+    if has_param "$param" "$@"; then
+        echo "$param"
+    fi
+}
+
 # Exit if user is not root
 function require_root {
 
